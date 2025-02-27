@@ -1,11 +1,15 @@
-# Welcome to your Jupyter Book
+# Penambangan Data 
 
-This is a small sample book to give you a feel for how book content is
-structured.
-It shows off a few of the major file types, as well as some sample content.
-It does not go in-depth into any particular topic - check out [the Jupyter Book documentation](https://jupyterbook.org) for more information.
+Penambangan data, yang juga dikenal "data mining" adalah proses ektraksi informasi yang berharga atau pola tersembunyi dari sejumlah besar data yang tersimpan dalam berbagai sumber. Metode penambangan data melibatkan penggunaan teknik komputasional untuk menganalisis data secara sistematis, mengidentifikasi pola, tren, atau hubungan yang dapat membantu dalam pengambilan keputusan atau mengungkapkan wawasan baru.
 
-Check out the content pages bundled with this sample book to see more.
+
+Nama    : M Tegar FIrmandani
+
+Nim     : 230411100084
+
+Prodi   : Teknik Informatika 
+
+Email   : firmandani6061@gmail.com
 
 ```{tableofcontents}
 ```
