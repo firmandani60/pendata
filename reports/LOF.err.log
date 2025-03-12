@@ -18,65 +18,88 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
+import psycopg2
+import pymysql
+import numpy as np
 import pandas as pd
-from sklearn.neighbors import LocalOutlierFactor
+import seaborn as sns
+import matplotlib.pyplot as plt
+from scipy.spatial.distance import euclidean
 
-# Gabungkan berdasarkan kolom 'id' dan 'class'
-df_merge = pd.merge(df_mysql, df_postgresql, on=["id", "class"], how="inner")
+def get_pg_data():
+    conn = psycopg2.connect(
+        host="pg-292ef6f0-postgesql.d.aivencloud.com",
+        user="avnadmin",
+        password="AVNS_iFCt7xp02vTczdlhooY",
+        database="defaultdb",
+        port=16905
+    )
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM firmandani.postgree")
+    data = cursor.fetchall()
+    columns = [desc[0] for desc in cursor.description]
+    cursor.close()
+    conn.close()
+    return pd.DataFrame(data, columns=columns)
 
-# Ambil data fitur numerik tanpa kolom 'class'
-feature_columns = ["petal_length", "petal_width", "sepal_length", "sepal_width"]
-data_values = df_merge[feature_columns].values
+def get_mysql_data():
+    conn = pymysql.connect(
+        host="mysql-ef66224-mmsql.d.aivencloud.com",
+        user="avnadmin",
+        password="AVNS_NrOpqQJhytxwdcC6shv",
+        database="defaultdb",
+        port=21910
+    )
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM flowers")
+    data = cursor.fetchall()
+    columns = [desc[0] for desc in cursor.description]
+    cursor.close()
+    conn.close()
+    return pd.DataFrame(data, columns=columns)
 
-# Inisialisasi model LOF
-clf = LocalOutlierFactor(n_neighbors=90)
-label = clf.fit_predict(data_values)
+# Ambil data dari kedua database
+df_postgresql = get_pg_data()
+df_mysql = get_mysql_data()
+df_postgresql = df_postgresql.rename(columns={'Class': 'class'})
 
-# Tambahkan hasil label ke dataframe
-df_merge["outlier_label"] = label
+# Gabungkan berdasarkan kolom 'id' dan 'Class'
+df_merged = pd.merge(df_mysql, df_postgresql, on=["id", "class"], how="inner")
 
-# Cetak hasil dengan ID dan class
-print(df_merge.to_string(index=False))
-
-num_outliers = (label == -1).sum()
-print(f"\nJumlah outlier: {num_outliers}")
-
-outliers = df_merge[df_merge["outlier_label"] == -1]
-print("\nData Outlier:")
-print(outliers.to_string(index=False))
+# Ambil data fitur numerik
+feature_columns = ["petal length", "petal width", "sepal length", "sepal width"]
+data_values = df_merged[feature_columns].values
 ------------------
 
 
 [0;31m---------------------------------------------------------------------------[0m
-[0;31mKeyError[0m                                  Traceback (most recent call last)
-Cell [0;32mIn[4], line 9[0m
-[1;32m      7[0m [38;5;66;03m# Ambil data fitur numerik tanpa kolom 'class'[39;00m
-[1;32m      8[0m feature_columns [38;5;241m=[39m [[38;5;124m"[39m[38;5;124mpetal_length[39m[38;5;124m"[39m, [38;5;124m"[39m[38;5;124mpetal_width[39m[38;5;124m"[39m, [38;5;124m"[39m[38;5;124msepal_length[39m[38;5;124m"[39m, [38;5;124m"[39m[38;5;124msepal_width[39m[38;5;124m"[39m]
-[0;32m----> 9[0m data_values [38;5;241m=[39m [43mdf_merge[49m[43m[[49m[43mfeature_columns[49m[43m][49m[38;5;241m.[39mvalues
-[1;32m     11[0m [38;5;66;03m# Inisialisasi model LOF[39;00m
-[1;32m     12[0m clf [38;5;241m=[39m LocalOutlierFactor(n_neighbors[38;5;241m=[39m[38;5;241m90[39m)
+[0;31mOperationalError[0m                          Traceback (most recent call last)
+Cell [0;32mIn[3], line 42[0m
+[1;32m     39[0m     [38;5;28;01mreturn[39;00m pd[38;5;241m.[39mDataFrame(data, columns[38;5;241m=[39mcolumns)
+[1;32m     41[0m [38;5;66;03m# Ambil data dari kedua database[39;00m
+[0;32m---> 42[0m df_postgresql [38;5;241m=[39m [43mget_pg_data[49m[43m([49m[43m)[49m
+[1;32m     43[0m df_mysql [38;5;241m=[39m get_mysql_data()
+[1;32m     44[0m df_postgresql [38;5;241m=[39m df_postgresql[38;5;241m.[39mrename(columns[38;5;241m=[39m{[38;5;124m'[39m[38;5;124mClass[39m[38;5;124m'[39m: [38;5;124m'[39m[38;5;124mclass[39m[38;5;124m'[39m})
 
-File [0;32m~/.local/lib/python3.12/site-packages/pandas/core/frame.py:4108[0m, in [0;36mDataFrame.__getitem__[0;34m(self, key)[0m
-[1;32m   4106[0m     [38;5;28;01mif[39;00m is_iterator(key):
-[1;32m   4107[0m         key [38;5;241m=[39m [38;5;28mlist[39m(key)
-[0;32m-> 4108[0m     indexer [38;5;241m=[39m [38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43mcolumns[49m[38;5;241;43m.[39;49m[43m_get_indexer_strict[49m[43m([49m[43mkey[49m[43m,[49m[43m [49m[38;5;124;43m"[39;49m[38;5;124;43mcolumns[39;49m[38;5;124;43m"[39;49m[43m)[49m[[38;5;241m1[39m]
-[1;32m   4110[0m [38;5;66;03m# take() does not accept boolean indexers[39;00m
-[1;32m   4111[0m [38;5;28;01mif[39;00m [38;5;28mgetattr[39m(indexer, [38;5;124m"[39m[38;5;124mdtype[39m[38;5;124m"[39m, [38;5;28;01mNone[39;00m) [38;5;241m==[39m [38;5;28mbool[39m:
+Cell [0;32mIn[3], line 10[0m, in [0;36mget_pg_data[0;34m()[0m
+[1;32m      9[0m [38;5;28;01mdef[39;00m [38;5;21mget_pg_data[39m():
+[0;32m---> 10[0m     conn [38;5;241m=[39m [43mpsycopg2[49m[38;5;241;43m.[39;49m[43mconnect[49m[43m([49m
+[1;32m     11[0m [43m        [49m[43mhost[49m[38;5;241;43m=[39;49m[38;5;124;43m"[39;49m[38;5;124;43mpg-292ef6f0-postgesql.d.aivencloud.com[39;49m[38;5;124;43m"[39;49m[43m,[49m
+[1;32m     12[0m [43m        [49m[43muser[49m[38;5;241;43m=[39;49m[38;5;124;43m"[39;49m[38;5;124;43mavnadmin[39;49m[38;5;124;43m"[39;49m[43m,[49m
+[1;32m     13[0m [43m        [49m[43mpassword[49m[38;5;241;43m=[39;49m[38;5;124;43m"[39;49m[38;5;124;43mAVNS_iFCt7xp02vTczdlhooY[39;49m[38;5;124;43m"[39;49m[43m,[49m
+[1;32m     14[0m [43m        [49m[43mdatabase[49m[38;5;241;43m=[39;49m[38;5;124;43m"[39;49m[38;5;124;43mdefaultdb[39;49m[38;5;124;43m"[39;49m[43m,[49m
+[1;32m     15[0m [43m        [49m[43mport[49m[38;5;241;43m=[39;49m[38;5;241;43m16905[39;49m
+[1;32m     16[0m [43m    [49m[43m)[49m
+[1;32m     17[0m     cursor [38;5;241m=[39m conn[38;5;241m.[39mcursor()
+[1;32m     18[0m     cursor[38;5;241m.[39mexecute([38;5;124m"[39m[38;5;124mSELECT * FROM firmandani.postgree[39m[38;5;124m"[39m)
 
-File [0;32m~/.local/lib/python3.12/site-packages/pandas/core/indexes/base.py:6200[0m, in [0;36mIndex._get_indexer_strict[0;34m(self, key, axis_name)[0m
-[1;32m   6197[0m [38;5;28;01melse[39;00m:
-[1;32m   6198[0m     keyarr, indexer, new_indexer [38;5;241m=[39m [38;5;28mself[39m[38;5;241m.[39m_reindex_non_unique(keyarr)
-[0;32m-> 6200[0m [38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43m_raise_if_missing[49m[43m([49m[43mkeyarr[49m[43m,[49m[43m [49m[43mindexer[49m[43m,[49m[43m [49m[43maxis_name[49m[43m)[49m
-[1;32m   6202[0m keyarr [38;5;241m=[39m [38;5;28mself[39m[38;5;241m.[39mtake(indexer)
-[1;32m   6203[0m [38;5;28;01mif[39;00m [38;5;28misinstance[39m(key, Index):
-[1;32m   6204[0m     [38;5;66;03m# GH 42790 - Preserve name from an Index[39;00m
+File [0;32m/usr/local/python/3.12.1/lib/python3.12/site-packages/psycopg2/__init__.py:122[0m, in [0;36mconnect[0;34m(dsn, connection_factory, cursor_factory, **kwargs)[0m
+[1;32m    119[0m     kwasync[[38;5;124m'[39m[38;5;124masync_[39m[38;5;124m'[39m] [38;5;241m=[39m kwargs[38;5;241m.[39mpop([38;5;124m'[39m[38;5;124masync_[39m[38;5;124m'[39m)
+[1;32m    121[0m dsn [38;5;241m=[39m _ext[38;5;241m.[39mmake_dsn(dsn, [38;5;241m*[39m[38;5;241m*[39mkwargs)
+[0;32m--> 122[0m conn [38;5;241m=[39m [43m_connect[49m[43m([49m[43mdsn[49m[43m,[49m[43m [49m[43mconnection_factory[49m[38;5;241;43m=[39;49m[43mconnection_factory[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwasync[49m[43m)[49m
+[1;32m    123[0m [38;5;28;01mif[39;00m cursor_factory [38;5;129;01mis[39;00m [38;5;129;01mnot[39;00m [38;5;28;01mNone[39;00m:
+[1;32m    124[0m     conn[38;5;241m.[39mcursor_factory [38;5;241m=[39m cursor_factory
 
-File [0;32m~/.local/lib/python3.12/site-packages/pandas/core/indexes/base.py:6249[0m, in [0;36mIndex._raise_if_missing[0;34m(self, key, indexer, axis_name)[0m
-[1;32m   6247[0m [38;5;28;01mif[39;00m nmissing:
-[1;32m   6248[0m     [38;5;28;01mif[39;00m nmissing [38;5;241m==[39m [38;5;28mlen[39m(indexer):
-[0;32m-> 6249[0m         [38;5;28;01mraise[39;00m [38;5;167;01mKeyError[39;00m([38;5;124mf[39m[38;5;124m"[39m[38;5;124mNone of [[39m[38;5;132;01m{[39;00mkey[38;5;132;01m}[39;00m[38;5;124m] are in the [[39m[38;5;132;01m{[39;00maxis_name[38;5;132;01m}[39;00m[38;5;124m][39m[38;5;124m"[39m)
-[1;32m   6251[0m     not_found [38;5;241m=[39m [38;5;28mlist[39m(ensure_index(key)[missing_mask[38;5;241m.[39mnonzero()[[38;5;241m0[39m]][38;5;241m.[39munique())
-[1;32m   6252[0m     [38;5;28;01mraise[39;00m [38;5;167;01mKeyError[39;00m([38;5;124mf[39m[38;5;124m"[39m[38;5;132;01m{[39;00mnot_found[38;5;132;01m}[39;00m[38;5;124m not in index[39m[38;5;124m"[39m)
+[0;31mOperationalError[0m: could not translate host name "pg-292ef6f0-postgesql.d.aivencloud.com" to address: Name or service not known
 
-[0;31mKeyError[0m: "None of [Index(['petal_length', 'petal_width', 'sepal_length', 'sepal_width'], dtype='object')] are in the [columns]"
 

@@ -386,6 +386,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bagaimana-tahapan-lof">BAGAIMANA TAHAPAN LOF</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contoh-menghitung-manual-lof">CONTOH MENGHITUNG MANUAL LOF</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementasi-pakai-sklearn-untuk-data-contoh">IMPLEMENTASI PAKAI SKLEARN UNTUK DATA CONTOH</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pebedaan-perhitungan-manual-dan-sklearn"><strong>Pebedaan perhitungan manual dan sklearn</strong></a></li>
 </ul>
             </nav>
         </div>
@@ -605,6 +606,39 @@ Data Outlier:
 </div>
 </div>
 </div>
+</section>
+<section id="pebedaan-perhitungan-manual-dan-sklearn">
+<h2><strong>Pebedaan perhitungan manual dan sklearn</strong><a class="headerlink" href="#pebedaan-perhitungan-manual-dan-sklearn" title="Link to this heading">#</a></h2>
+<p><strong>1. Perbedaan Pendekatan dalam Perhitungan Manual vs. Sklearn</strong></p>
+<ul class="simple">
+<li><p>Dalam perhitungan manual, LOF untuk titik ke-5 dihitung dengan tetangga terdekatnya, titik 4 dan titik 6.</p></li>
+<li><p>Jika nilai LOF &gt; 1, titik tersebut dianggap memiliki kepadatan lebih rendah dibandingkan dengan tetangga-tetangganya, sehingga berpotensi menjadi outlier.</p></li>
+<li><p>Namun, pada kode Python dengan LocalOutlierFactor(n_neighbors=2), sklearn menghitung LOF untuk semua titik secara bersamaan dengan mempertimbangkan distribusi kepadatan global.</p></li>
+</ul>
+<p><strong>2. Titik 9 dan 10 Sangat Jauh dari Titik Lain</strong></p>
+<ul class="simple">
+<li><p>Titik 9 (20.0, 20.0) dan Titik 10 (21.0, 21.0) memiliki jarak yang sangat jauh dari titik-titik lainnya.</p></li>
+<li><p>Karena LOF mengukur kepadatan relatif, titik-titik ini memiliki kepadatan yang jauh lebih rendah dibandingkan titik-titik lain di sekitarnya.</p></li>
+<li><p>Oleh karena itu, mereka lebih mudah terdeteksi sebagai outlier dalam model sklearn.</p></li>
+</ul>
+<p><strong>3. Titik 5 dalam Konteks Global Tidak Outlier</strong></p>
+<ul class="simple">
+<li><p>Dalam perhitungan manual, titik 5 memiliki LOF = 2, yang berarti kepadatannya lebih rendah dari tetangganya.</p></li>
+<li><p>Namun, dalam konteks global dataset (melalui sklearn), titik 5 masih cukup dekat dengan sebagian besar titik lainnya.</p></li>
+<li><p>Oleh karena itu, titik 5 tidak ditandai sebagai outlier dalam pendekatan sklearn.</p></li>
+</ul>
+<p><strong>4. Pemilihan Parameter n_neighbors Berpengaruh</strong></p>
+<ul class="simple">
+<li><p>n_neighbors=2 dalam sklearn berarti hanya dua tetangga terdekat yang dipertimbangkan.</p></li>
+<li><p>Jika kita meningkatkan nilai n_neighbors, hasil deteksi outlier bisa berbeda.</p></li>
+<li><p>Untuk melihat apakah titik 5 bisa menjadi outlier dalam pendekatan sklearn, kita bisa mencoba nilai n_neighbors yang lebih besar, misalnya 3 atau 4.</p></li>
+</ul>
+<p><strong>5. Kesimpulan</strong></p>
+<ul class="simple">
+<li><p>Titik 5 memiliki kepadatan lebih rendah dari tetangganya tetapi tidak cukup rendah dalam konteks global untuk dianggap outlier oleh sklearn.</p></li>
+<li><p>Titik 9 dan 10 jauh lebih berbeda dari yang lain, sehingga lebih jelas sebagai outlier.</p></li>
+<li><p>Perbedaan hasil antara perhitungan manual dan sklearn bisa terjadi karena cara model menghitung kepadatan secara global.</p></li>
+</ul>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">pip</span> install pymysql
@@ -689,6 +723,39 @@ Data Outlier:
 <span class="c1"># Ambil data fitur numerik</span>
 <span class="n">feature_columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;petal length&quot;</span><span class="p">,</span> <span class="s2">&quot;petal width&quot;</span><span class="p">,</span> <span class="s2">&quot;sepal length&quot;</span><span class="p">,</span> <span class="s2">&quot;sepal width&quot;</span><span class="p">]</span>
 <span class="n">data_values</span> <span class="o">=</span> <span class="n">df_merged</span><span class="p">[</span><span class="n">feature_columns</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">OperationalError</span><span class="g g-Whitespace">                          </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">line</span> <span class="mi">42</span>
+<span class="g g-Whitespace">     </span><span class="mi">39</span>     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">41</span> <span class="c1"># Ambil data dari kedua database</span>
+<span class="ne">---&gt; </span><span class="mi">42</span> <span class="n">df_postgresql</span> <span class="o">=</span> <span class="n">get_pg_data</span><span class="p">()</span>
+<span class="g g-Whitespace">     </span><span class="mi">43</span> <span class="n">df_mysql</span> <span class="o">=</span> <span class="n">get_mysql_data</span><span class="p">()</span>
+<span class="g g-Whitespace">     </span><span class="mi">44</span> <span class="n">df_postgresql</span> <span class="o">=</span> <span class="n">df_postgresql</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Class&#39;</span><span class="p">:</span> <span class="s1">&#39;class&#39;</span><span class="p">})</span>
+
+<span class="nn">Cell In[3], line 10,</span> in <span class="ni">get_pg_data</span><span class="nt">()</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="k">def</span> <span class="nf">get_pg_data</span><span class="p">():</span>
+<span class="ne">---&gt; </span><span class="mi">10</span>     <span class="n">conn</span> <span class="o">=</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+<span class="g g-Whitespace">     </span><span class="mi">11</span>         <span class="n">host</span><span class="o">=</span><span class="s2">&quot;pg-292ef6f0-postgesql.d.aivencloud.com&quot;</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">12</span>         <span class="n">user</span><span class="o">=</span><span class="s2">&quot;avnadmin&quot;</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">13</span>         <span class="n">password</span><span class="o">=</span><span class="s2">&quot;AVNS_iFCt7xp02vTczdlhooY&quot;</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">14</span>         <span class="n">database</span><span class="o">=</span><span class="s2">&quot;defaultdb&quot;</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">15</span>         <span class="n">port</span><span class="o">=</span><span class="mi">16905</span>
+<span class="g g-Whitespace">     </span><span class="mi">16</span>     <span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">17</span>     <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+<span class="g g-Whitespace">     </span><span class="mi">18</span>     <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM firmandani.postgree&quot;</span><span class="p">)</span>
+
+<span class="nn">File /usr/local/python/3.12.1/lib/python3.12/site-packages/psycopg2/__init__.py:122,</span> in <span class="ni">connect</span><span class="nt">(dsn, connection_factory, cursor_factory, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">119</span>     <span class="n">kwasync</span><span class="p">[</span><span class="s1">&#39;async_&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;async_&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">121</span> <span class="n">dsn</span> <span class="o">=</span> <span class="n">_ext</span><span class="o">.</span><span class="n">make_dsn</span><span class="p">(</span><span class="n">dsn</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">122</span> <span class="n">conn</span> <span class="o">=</span> <span class="n">_connect</span><span class="p">(</span><span class="n">dsn</span><span class="p">,</span> <span class="n">connection_factory</span><span class="o">=</span><span class="n">connection_factory</span><span class="p">,</span> <span class="o">**</span><span class="n">kwasync</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">123</span> <span class="k">if</span> <span class="n">cursor_factory</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">124</span>     <span class="n">conn</span><span class="o">.</span><span class="n">cursor_factory</span> <span class="o">=</span> <span class="n">cursor_factory</span>
+
+<span class="ne">OperationalError</span>: could not translate host name &quot;pg-292ef6f0-postgesql.d.aivencloud.com&quot; to address: Name or service not known
 </pre></div>
 </div>
 </div>
@@ -954,6 +1021,7 @@ Data Outlier:
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bagaimana-tahapan-lof">BAGAIMANA TAHAPAN LOF</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contoh-menghitung-manual-lof">CONTOH MENGHITUNG MANUAL LOF</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementasi-pakai-sklearn-untuk-data-contoh">IMPLEMENTASI PAKAI SKLEARN UNTUK DATA CONTOH</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pebedaan-perhitungan-manual-dan-sklearn"><strong>Pebedaan perhitungan manual dan sklearn</strong></a></li>
 </ul>
   </nav></div>
 
