@@ -384,15 +384,7 @@ document.write(`
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#apa-itu-lof">APA ITU LOF</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bagaimana-tahapan-lof">BAGAIMANA TAHAPAN LOF</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contoh-menghitung-manual-lof">CONTOH MENGHITUNG MANUAL LOF</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-1-tentukan-jarak-euclidean">Langkah 1: Tentukan Jarak Euclidean</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-2-tentukan-k-tetangga-terdekat-k-2">Langkah 2: Tentukan k-Tetangga Terdekat (k = 2)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-3-hitung-reachability-distance">Langkah 3: Hitung Reachability Distance</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-4-hitung-local-reachability-density-lrd">Langkah 4: Hitung Local Reachability Density (LRD)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-5-hitung-lof">Langkah 5: Hitung LOF</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-6-interpretasi">Langkah 6: Interpretasi</a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contoh-menghitung-manual-lof">CONTOH MENGHITUNG MANUAL LOF</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementasi-pakai-sklearn-untuk-data-contoh">IMPLEMENTASI PAKAI SKLEARN UNTUK DATA CONTOH</a></li>
 </ul>
             </nav>
@@ -473,134 +465,86 @@ Misalkan data berikut:</p></li>
 </tr>
 <tr class="row-odd"><td><p>6</p></td>
 <td><p>6.0</p></td>
-<td><p>7.0</p></td>
+<td><p>5.0</p></td>
 </tr>
 <tr class="row-even"><td><p>7</p></td>
 <td><p>7.0</p></td>
-<td><p>8.0</p></td>
+<td><p>2.0</p></td>
 </tr>
 <tr class="row-odd"><td><p>8</p></td>
 <td><p>8.0</p></td>
-<td><p>9.0</p></td>
+<td><p>1.0</p></td>
 </tr>
 <tr class="row-even"><td><p>8</p></td>
-<td><p>20.0</p></td>
-<td><p>20.0</p></td>
+<td><p>9.0</p></td>
+<td><p>3.0</p></td>
 </tr>
 <tr class="row-odd"><td><p>10</p></td>
-<td><p>21.0</p></td>
-<td><p>21.0</p></td>
+<td><p>2.0</p></td>
+<td><p>7.0</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>Untuk menghitung Local Outlier Factor (LOF) dan memeriksa titik mana yang dianggap outlier, kita perlu mengikuti beberapa langkah penting. Berikut adalah langkah-langkah untuk menghitung LOF untuk titik 9 dan 10 berdasarkan data yang sudah diberikan.</p>
-<section id="langkah-1-tentukan-jarak-euclidean">
-<h3>Langkah 1: Tentukan Jarak Euclidean<a class="headerlink" href="#langkah-1-tentukan-jarak-euclidean" title="Link to this heading">#</a></h3>
-<p><span class="math notranslate nohighlight">\( \text{Jarak} = \sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2} \)</span>
-Kita sudah memiliki jarak Euclidean untuk beberapa titik. Mari kita lihat jarak Euclidean yang relevan antara titik 9 dan titik lainnya:</p>
+<p>Hitung LOF untuk Titik 10 (2.0, 7.0)</p>
+<ol class="arabic simple" start="2">
+<li><p><strong>Hitung Jarak Euclidean:</strong></p></li>
+</ol>
+<p>Rumus Menghitung Jarak Euclidean</p>
+<p><span class="math notranslate nohighlight">\( \text{Jarak} = \sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2} \)</span></p>
+<p>Jarak Euclidean antara titik <strong>10 (2.0, 7.0)</strong> dan titik lainnya:</p>
 <ul class="simple">
-<li><p>Ke titik 8: 12.0</p></li>
-<li><p>Ke titik 7: 14.0</p></li>
-<li><p>Ke titik 6: 15.13</p></li>
-<li><p>Ke titik 5: 20.52</p></li>
-<li><p>Ke titik 4: 21.21</p></li>
-<li><p>Ke titik 3: 22.63</p></li>
-<li><p>Ke titik 2: 23.54</p></li>
-<li><p>Ke titik 1: 24.02</p></li>
-<li><p>Ke titik 9: 0 (karena jarak ke dirinya sendiri)</p></li>
-<li><p>Ke titik 10: 1.41</p></li>
+<li><p>ke titik 1 = <strong>5.00</strong></p></li>
+<li><p>ke titik 2 = <strong>4.00</strong></p></li>
+<li><p>ke titik 3 = <strong>3.16</strong></p></li>
+<li><p>ke titik 4 = <strong>2.24</strong></p></li>
+<li><p>ke titik 5 = <strong>1.41</strong></p></li>
+<li><p>ke titik 6 = <strong>2.24</strong></p></li>
+<li><p>ke titik 7 = <strong>5.39</strong></p></li>
+<li><p>ke titik 8 = <strong>6.71</strong></p></li>
+<li><p>ke titik 9 = <strong>5.10</strong></p></li>
 </ul>
-</section>
-<section id="langkah-2-tentukan-k-tetangga-terdekat-k-2">
-<h3>Langkah 2: Tentukan k-Tetangga Terdekat (k = 2)<a class="headerlink" href="#langkah-2-tentukan-k-tetangga-terdekat-k-2" title="Link to this heading">#</a></h3>
-<p>Kita pilih dua tetangga terdekat untuk titik 9 dan titik 10.</p>
+<ol class="arabic simple" start="3">
+<li><p><strong>Tentukan k-Tetangga Terdekat (k=2):</strong></p></li>
+</ol>
 <ul class="simple">
-<li><p><strong>Untuk titik 9</strong>:</p>
-<ul>
-<li><p>Titik 10 (jarak 1.41)</p></li>
-<li><p>Titik 8 (jarak 12.0)</p></li>
+<li><p>Titik <strong>(2.0, 7.0)</strong> ke titik <strong>5 (5.0, 6.0)</strong> dengan jarak <strong>1.41</strong></p></li>
+<li><p>Titik <strong>(2.0, 7.0)</strong> ke titik <strong>4 (4.0, 5.0)</strong> dengan jarak <strong>2.24</strong></p></li>
 </ul>
-</li>
-<li><p><strong>Untuk titik 10</strong>:</p>
-<ul>
-<li><p>Titik 9 (jarak 1.41)</p></li>
-<li><p>Titik 8 (jarak 14.0)</p></li>
+<ol class="arabic simple" start="4">
+<li><p><strong>Hitung Reachability Distance:</strong></p></li>
+</ol>
+<ul class="simple">
+<li><p>Reachability distance ke titik <strong>5</strong> = <strong>1.41</strong></p></li>
+<li><p>Reachability distance ke titik <strong>4</strong> = <strong>2.24</strong></p></li>
 </ul>
-</li>
-</ul>
-</section>
-<section id="langkah-3-hitung-reachability-distance">
-<h3>Langkah 3: Hitung Reachability Distance<a class="headerlink" href="#langkah-3-hitung-reachability-distance" title="Link to this heading">#</a></h3>
-<p>Reachability distance dihitung dengan rumus:</p>
+<ol class="arabic simple" start="5">
+<li><p><strong>Hitung Local Reachability Density (LRD):</strong></p></li>
+</ol>
 <p><span class="math notranslate nohighlight">\(
-\text{Reachability Distance}(p, o) = \max(\text{k-Distance}(p), \text{Euclidean Distance}(p, o))
+\text{LRD}(10) = \frac{1}{\frac{1}{2} \times (1.41 + 2.24)}
 \)</span></p>
-<p>Untuk titik 9 dan 10:</p>
-<ul class="simple">
-<li><p><strong>Untuk titik 9</strong>:</p>
-<ul>
-<li><p>Reachability Distance ke titik 10 = <span class="math notranslate nohighlight">\(\max(1.41, 1.41) = 1.41\)</span></p></li>
-<li><p>Reachability Distance ke titik 8 = <span class="math notranslate nohighlight">\(\max(12.0, 12.0) = 12.0\)</span></p></li>
-</ul>
-</li>
-<li><p><strong>Untuk titik 10</strong>:</p>
-<ul>
-<li><p>Reachability Distance ke titik 9 = <span class="math notranslate nohighlight">\(\max(1.41, 1.41) = 1.41\)</span></p></li>
-<li><p>Reachability Distance ke titik 8 = <span class="math notranslate nohighlight">\(\max(12.0, 14.0) = 14.0\)</span></p></li>
-</ul>
-</li>
-</ul>
-</section>
-<section id="langkah-4-hitung-local-reachability-density-lrd">
-<h3>Langkah 4: Hitung Local Reachability Density (LRD)<a class="headerlink" href="#langkah-4-hitung-local-reachability-density-lrd" title="Link to this heading">#</a></h3>
-<p>Local Reachability Density (LRD) dihitung menggunakan rumus:</p>
 <p><span class="math notranslate nohighlight">\(
-\text{LRD}(p) = \frac{1}{\sum \text{Reachability Distance}(p, o)}
+\text{LRD}(10) = 0.57
 \)</span></p>
-<p>Untuk titik 9 dan titik 10:</p>
-<ul class="simple">
-<li><p><strong>Untuk titik 9</strong>:</p>
-<ul>
-<li><p>LRD(9) = <span class="math notranslate nohighlight">\( \frac{1}{(1.41 + 12.0)} \approx 0.073\)</span></p></li>
-</ul>
-</li>
-<li><p><strong>Untuk titik 10</strong>:</p>
-<ul>
-<li><p>LRD(10) = <span class="math notranslate nohighlight">\( \frac{1}{(1.41 + 14.0)} \approx 0.067\)</span></p></li>
-</ul>
-</li>
-</ul>
-</section>
-<section id="langkah-5-hitung-lof">
-<h3>Langkah 5: Hitung LOF<a class="headerlink" href="#langkah-5-hitung-lof" title="Link to this heading">#</a></h3>
-<p>LOF dihitung dengan rumus:</p>
+<ol class="arabic simple" start="6">
+<li><p><strong>Hitung LOF:</strong>
+Untuk menghitung <strong>LOF(10)</strong>, kita perlu LRD dari titik <strong>4 dan 5</strong>.</p></li>
+</ol>
 <p><span class="math notranslate nohighlight">\(
-\text{LOF}(p) = \frac{\sum \frac{\text{LRD}(o)}{\text{LRD}(p)}}{k}
+\text{LRD}(4) = 0.91
 \)</span></p>
-<ul class="simple">
-<li><p><strong>Untuk titik 9</strong>:</p>
-<ul>
-<li><p>LOF(9) = <span class="math notranslate nohighlight">\(\frac{\text{LRD}(10)}{\text{LRD}(9)} = \frac{0.067}{0.073} \approx 0.92\)</span></p></li>
-</ul>
-</li>
-<li><p><strong>Untuk titik 10</strong>:</p>
-<ul>
-<li><p>LOF(10) = <span class="math notranslate nohighlight">\(\frac{\text{LRD}(9)}{\text{LRD}(10)} = \frac{0.073}{0.067} \approx 1.09\)</span></p></li>
-</ul>
-</li>
-</ul>
-</section>
-<section id="langkah-6-interpretasi">
-<h3>Langkah 6: Interpretasi<a class="headerlink" href="#langkah-6-interpretasi" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Titik 9 memiliki LOF sekitar 0.92, yang lebih kecil dari 1, sehingga <strong>tidak dianggap outlier</strong>.</p></li>
-<li><p>Titik 10 memiliki LOF sekitar 1.09, yang lebih besar dari 1, sehingga <strong>titik 10 dianggap outlier</strong>.</p></li>
-</ul>
-<p><strong>Kesimpulan</strong>:
-Titik 10 dianggap outlier, tetapi titik 9 tidak dianggap outlier dalam hal LOF.</p>
+<p><span class="math notranslate nohighlight">\(
+\text{LRD}(5) = 1.10
+\)</span></p>
+<p><span class="math notranslate nohighlight">\(
+LOF(10) = \frac{0.91}{0.57} + \frac{1.10}{0.57} = 2.12
+\)</span></p>
+<ol class="arabic simple" start="7">
+<li><p><strong>Interpretasi:</strong>
+Karena <strong>LOF(10) = 2.12</strong> lebih besar dari <strong>1</strong>, titik <strong>10</strong> dianggap <strong>outlier</strong>.</p></li>
+</ol>
 <p>LOF mengukur seberapa terisolasi titik dibandingkan tetangganya. Titik dengan LOF lebih besar dari 1 dianggap outlier.</p>
-</section>
 </section>
 <section id="implementasi-pakai-sklearn-untuk-data-contoh">
 <h2>IMPLEMENTASI PAKAI SKLEARN UNTUK DATA CONTOH<a class="headerlink" href="#implementasi-pakai-sklearn-untuk-data-contoh" title="Link to this heading">#</a></h2>
@@ -612,8 +556,8 @@ Titik 10 dianggap outlier, tetapi titik 9 tidak dianggap outlier dalam hal LOF.<
 
 <span class="c1"># Dataset contoh</span>
 <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;Feature1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">,</span> <span class="mf">7.0</span><span class="p">,</span> <span class="mf">8.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">,</span> <span class="mf">21.0</span><span class="p">],</span>
-    <span class="s1">&#39;Feature2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">,</span> <span class="mf">7.0</span><span class="p">,</span> <span class="mf">8.0</span><span class="p">,</span> <span class="mf">9.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">,</span> <span class="mf">21.0</span><span class="p">]</span>
+    <span class="s1">&#39;Feature1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">,</span> <span class="mf">7.0</span><span class="p">,</span> <span class="mf">8.0</span><span class="p">,</span> <span class="mf">9.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">],</span>
+    <span class="s1">&#39;Feature2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">7.0</span><span class="p">]</span>
 <span class="p">}</span>
 
 <span class="c1"># Membuat DataFrame</span>
@@ -649,18 +593,17 @@ Titik 10 dianggap outlier, tetapi titik 9 tidak dianggap outlier dalam hal LOF.<
 2       3.0       4.0          1
 3       4.0       5.0          1
 4       5.0       6.0          1
-5       6.0       7.0          1
-6       7.0       8.0          1
-7       8.0       9.0          1
-8      20.0      20.0         -1
-9      21.0      21.0         -1
+5       6.0       5.0          1
+6       7.0       2.0          1
+7       8.0       1.0          1
+8       9.0       3.0          1
+9       2.0       7.0         -1
 
-Jumlah outlier: 2
+Jumlah outlier: 1
 
 Data Outlier:
    Feature1  Feature2  LOF Label
-8      20.0      20.0         -1
-9      21.0      21.0         -1
+9       2.0       7.0         -1
 </pre></div>
 </div>
 </div>
@@ -752,39 +695,6 @@ Data Outlier:
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">OperationalError</span><span class="g g-Whitespace">                          </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">line</span> <span class="mi">42</span>
-<span class="g g-Whitespace">     </span><span class="mi">39</span>     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">41</span> <span class="c1"># Ambil data dari kedua database</span>
-<span class="ne">---&gt; </span><span class="mi">42</span> <span class="n">df_postgresql</span> <span class="o">=</span> <span class="n">get_pg_data</span><span class="p">()</span>
-<span class="g g-Whitespace">     </span><span class="mi">43</span> <span class="n">df_mysql</span> <span class="o">=</span> <span class="n">get_mysql_data</span><span class="p">()</span>
-<span class="g g-Whitespace">     </span><span class="mi">44</span> <span class="n">df_postgresql</span> <span class="o">=</span> <span class="n">df_postgresql</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Class&#39;</span><span class="p">:</span> <span class="s1">&#39;class&#39;</span><span class="p">})</span>
-
-<span class="nn">Cell In[3], line 10,</span> in <span class="ni">get_pg_data</span><span class="nt">()</span>
-<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="k">def</span> <span class="nf">get_pg_data</span><span class="p">():</span>
-<span class="ne">---&gt; </span><span class="mi">10</span>     <span class="n">conn</span> <span class="o">=</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
-<span class="g g-Whitespace">     </span><span class="mi">11</span>         <span class="n">host</span><span class="o">=</span><span class="s2">&quot;pg-292ef6f0-postgesql.d.aivencloud.com&quot;</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">12</span>         <span class="n">user</span><span class="o">=</span><span class="s2">&quot;avnadmin&quot;</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">13</span>         <span class="n">password</span><span class="o">=</span><span class="s2">&quot;AVNS_iFCt7xp02vTczdlhooY&quot;</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">14</span>         <span class="n">database</span><span class="o">=</span><span class="s2">&quot;defaultdb&quot;</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">15</span>         <span class="n">port</span><span class="o">=</span><span class="mi">16905</span>
-<span class="g g-Whitespace">     </span><span class="mi">16</span>     <span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">17</span>     <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
-<span class="g g-Whitespace">     </span><span class="mi">18</span>     <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM firmandani.postgree&quot;</span><span class="p">)</span>
-
-<span class="nn">File /usr/local/python/3.12.1/lib/python3.12/site-packages/psycopg2/__init__.py:122,</span> in <span class="ni">connect</span><span class="nt">(dsn, connection_factory, cursor_factory, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">119</span>     <span class="n">kwasync</span><span class="p">[</span><span class="s1">&#39;async_&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;async_&#39;</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">121</span> <span class="n">dsn</span> <span class="o">=</span> <span class="n">_ext</span><span class="o">.</span><span class="n">make_dsn</span><span class="p">(</span><span class="n">dsn</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">122</span> <span class="n">conn</span> <span class="o">=</span> <span class="n">_connect</span><span class="p">(</span><span class="n">dsn</span><span class="p">,</span> <span class="n">connection_factory</span><span class="o">=</span><span class="n">connection_factory</span><span class="p">,</span> <span class="o">**</span><span class="n">kwasync</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">123</span> <span class="k">if</span> <span class="n">cursor_factory</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">124</span>     <span class="n">conn</span><span class="o">.</span><span class="n">cursor_factory</span> <span class="o">=</span> <span class="n">cursor_factory</span>
-
-<span class="ne">OperationalError</span>: could not translate host name &quot;pg-292ef6f0-postgesql.d.aivencloud.com&quot; to address: Name or service not known
-</pre></div>
-</div>
-</div>
 </div>
 <p>Kode diatas hanya untuk menggabungkan data dari 2 database saja</p>
 <div class="cell docutils container">
@@ -820,20 +730,20 @@ Data Outlier:
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> id           class  petal length  petal width  sepal length  sepal width  outlier_label
-  1     Iris-setosa           1.4          0.2           5.1          3.5              1
-  2     Iris-setosa          14.0          2.0          40.9         30.0             -1
-  3     Iris-setosa           1.3          0.2           4.7          3.2              1
-  4     Iris-setosa           1.5          0.2           4.6          3.1              1
-  5     Iris-setosa           1.4          0.2           5.0          3.6              1
-  6     Iris-setosa           1.7          0.4           5.4          3.9              1
+  1     Iris-setosa           1.3          0.2           5.1          3.5              1
+  2     Iris-setosa         122.0        123.0         223.0        121.0             -1
+  3     Iris-setosa         234.0        241.0         121.0        142.0             -1
+  4     Iris-setosa         210.0        423.0         135.0       1423.0             -1
+  5     Iris-setosa         233.0        230.0         123.0        241.0             -1
+  6     Iris-setosa         201.0        221.0         521.0        123.0             -1
   7     Iris-setosa           1.4          0.3           4.6          3.4              1
-  8     Iris-setosa           1.5          0.2           5.0          3.4              1
-  9     Iris-setosa           1.4          0.2           4.4          2.9              1
- 10     Iris-setosa           1.5          0.1           4.9          3.1              1
+  8     Iris-setosa           1.0          0.2           5.0          3.4              1
+  9     Iris-setosa           4.0          0.2           5.0          2.9              1
+ 10     Iris-setosa           1.5          0.3           4.9          3.1              1
  11     Iris-setosa           1.5          0.2           5.4          3.7              1
- 12     Iris-setosa           1.6          0.2           4.8          3.4              1
- 13     Iris-setosa           1.4          0.1           4.8          3.0              1
- 14     Iris-setosa           1.1          0.1           4.3          3.0              1
+ 12     Iris-setosa           1.6          0.3           4.8          3.4              1
+ 13     Iris-setosa           4.3          0.1           4.8          3.0              1
+ 14     Iris-setosa           7.5          0.1           4.3          3.0              1
  15     Iris-setosa           1.2          0.2           5.8          4.0              1
  16     Iris-setosa           1.5          0.4           5.7          4.4              1
  17     Iris-setosa           1.3          0.4           5.4          3.9              1
@@ -870,11 +780,11 @@ Data Outlier:
  48     Iris-setosa           1.4          0.2           4.6          3.2              1
  49     Iris-setosa           1.5          0.2           5.3          3.7              1
  50     Iris-setosa           1.4          0.2           5.0          3.3              1
- 51 Iris-versicolor           4.7          1.4           7.0          3.2              1
- 52 Iris-versicolor           4.5          1.5           6.4          3.2              1
- 53 Iris-versicolor           4.9          1.5           6.9          3.1              1
- 54 Iris-versicolor           4.0          1.3           5.5          2.3              1
- 55 Iris-versicolor           4.6          1.5           6.5          2.8              1
+ 51 Iris-versicolor         124.0        231.0         210.0        201.0             -1
+ 52 Iris-versicolor         212.0        201.0         120.0        311.0             -1
+ 53 Iris-versicolor         310.0        414.0         125.0        144.0             -1
+ 54 Iris-versicolor         322.0        140.0         122.0        110.0             -1
+ 55 Iris-versicolor         112.0        312.0         211.0        112.0             -1
  56 Iris-versicolor           4.5          1.3           5.7          2.8              1
  57 Iris-versicolor           4.7          1.6           6.3          3.3              1
  58 Iris-versicolor           3.3          1.0           4.9          2.4              1
@@ -919,12 +829,12 @@ Data Outlier:
  97 Iris-versicolor           4.2          1.3           5.7          2.9              1
  98 Iris-versicolor           4.3          1.3           6.2          2.9              1
  99 Iris-versicolor           3.0          1.1           5.1          2.5              1
-100 Iris-versicolor           4.1          1.3           5.7          2.8              1
-101  Iris-virginica           6.0          2.5           6.3          3.3              1
-102  Iris-virginica           5.1          1.9           5.8          2.7              1
-103  Iris-virginica           5.9          2.1           7.1          3.0              1
-104  Iris-virginica           5.6          1.8           6.3          2.9              1
-105  Iris-virginica           5.8          2.2           6.5          3.0              1
+100 Iris-versicolor           4.1          1.3           5.0          2.6              1
+101  Iris-virginica         121.0        134.0         122.0        112.0             -1
+102  Iris-virginica         134.0        231.0         221.0        110.0             -1
+103  Iris-virginica         123.0        234.0         113.0        112.0             -1
+104  Iris-virginica         210.0        253.0         123.0        221.0             -1
+105  Iris-virginica         240.0        124.0         333.0        211.0             -1
 106  Iris-virginica           6.6          2.1           7.6          3.0              1
 107  Iris-virginica           4.5          1.7           4.9          2.5              1
 108  Iris-virginica           6.3          1.8           7.3          2.9              1
@@ -970,13 +880,26 @@ Data Outlier:
 148  Iris-virginica           5.2          2.0           6.5          3.0              1
 149  Iris-virginica           5.4          2.3           6.2          3.4              1
 150  Iris-virginica           5.1          1.8           5.9          3.0              1
-151             ???           5.1          3.2           5.8          1.0              1
 
-Jumlah outlier: 1
+Jumlah outlier: 15
 
 Data Outlier:
- id       class  petal length  petal width  sepal length  sepal width  outlier_label
-  2 Iris-setosa          14.0          2.0          40.9         30.0             -1
+ id           class  petal length  petal width  sepal length  sepal width  outlier_label
+  2     Iris-setosa         122.0        123.0         223.0        121.0             -1
+  3     Iris-setosa         234.0        241.0         121.0        142.0             -1
+  4     Iris-setosa         210.0        423.0         135.0       1423.0             -1
+  5     Iris-setosa         233.0        230.0         123.0        241.0             -1
+  6     Iris-setosa         201.0        221.0         521.0        123.0             -1
+ 51 Iris-versicolor         124.0        231.0         210.0        201.0             -1
+ 52 Iris-versicolor         212.0        201.0         120.0        311.0             -1
+ 53 Iris-versicolor         310.0        414.0         125.0        144.0             -1
+ 54 Iris-versicolor         322.0        140.0         122.0        110.0             -1
+ 55 Iris-versicolor         112.0        312.0         211.0        112.0             -1
+101  Iris-virginica         121.0        134.0         122.0        112.0             -1
+102  Iris-virginica         134.0        231.0         221.0        110.0             -1
+103  Iris-virginica         123.0        234.0         113.0        112.0             -1
+104  Iris-virginica         210.0        253.0         123.0        221.0             -1
+105  Iris-virginica         240.0        124.0         333.0        211.0             -1
 </pre></div>
 </div>
 </div>
@@ -1045,15 +968,7 @@ Data Outlier:
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#apa-itu-lof">APA ITU LOF</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bagaimana-tahapan-lof">BAGAIMANA TAHAPAN LOF</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contoh-menghitung-manual-lof">CONTOH MENGHITUNG MANUAL LOF</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-1-tentukan-jarak-euclidean">Langkah 1: Tentukan Jarak Euclidean</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-2-tentukan-k-tetangga-terdekat-k-2">Langkah 2: Tentukan k-Tetangga Terdekat (k = 2)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-3-hitung-reachability-distance">Langkah 3: Hitung Reachability Distance</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-4-hitung-local-reachability-density-lrd">Langkah 4: Hitung Local Reachability Density (LRD)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-5-hitung-lof">Langkah 5: Hitung LOF</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-6-interpretasi">Langkah 6: Interpretasi</a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contoh-menghitung-manual-lof">CONTOH MENGHITUNG MANUAL LOF</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementasi-pakai-sklearn-untuk-data-contoh">IMPLEMENTASI PAKAI SKLEARN UNTUK DATA CONTOH</a></li>
 </ul>
   </nav></div>
