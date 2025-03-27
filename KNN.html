@@ -183,6 +183,11 @@
 <li class="toctree-l1"><a class="reference internal" href="tugas1.html">Tugas 1 Pendata</a></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="Tugas2.html"><strong>OUTLINER DETEKSI</strong></a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2 current active"><a class="current reference internal" href="#"><strong>Deteksi Outlier dengan K-Nearest Neighbors (KNN) dalam Data Understanding</strong></a></li>
+
+
+
+
+
 <li class="toctree-l2"><a class="reference internal" href="LOF.html"><strong>Deteksi Outlier dengan metode Local Outlier Factor (LOF) dalam Data Understanding</strong></a></li>
 </ul>
 </details></li>
@@ -381,29 +386,39 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#"><strong>Deteksi Outlier dengan K-Nearest Neighbors (KNN) dalam Data Understanding</strong></a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mengapa-knn-bisa-digunakan-untuk-deteksi-outlier">1. Mengapa KNN Bisa Digunakan untuk Deteksi Outlier?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-langkah-deteksi-outlier-dengan-knn">2. Langkah-Langkah Deteksi Outlier dengan KNN</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kesimpulan">Kesimpulan</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#code-untuk-menampilkan-semua-data-dan-grafiknya"><strong>Code Untuk Menampilkan Semua Data dan Grafiknya</strong></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cara-perhitungan"><strong>1. Cara Perhitungan</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cara-kerja-perhitungan"><strong>2. Cara Kerja Perhitungan</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kegunaan-kode"><strong>3. Kegunaan Kode</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#memisahkan-outlier-dari-data"><strong>Memisahkan Outlier dari Data</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><strong>1. Cara Perhitungan</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2"><strong>2. Cara Kerja Perhitungan</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#menghitung-akurasi-data"><strong>Menghitung Akurasi Data</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualisasi-data"><strong>Visualisasi Data</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#persiapan-data">1. <strong>Persiapan Data</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#membagi-data-training-dan-testing"><strong>2. Membagi Data Training dan Testing</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pembuatan-dan-pelatihan-model-knn"><strong>3. Pembuatan dan Pelatihan Model KNN</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluasi-model"><strong>4. Evaluasi Model</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualisasi-decision-boundary"><strong>5. Visualisasi Decision Boundary</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3"><strong>1. Persiapan Data</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pelatihan-dan-evaluasi-model"><strong>2. Pelatihan dan Evaluasi Model</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualisasi-confusion-matrix"><strong>3. Visualisasi Confusion Matrix</strong></a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#code-untuk-menampilkan-semua-data-dan-grafiknya"><strong>Code Untuk Menampilkan Semua Data dan Grafiknya</strong></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cara-perhitungan"><strong>1. Cara Perhitungan</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cara-kerja-perhitungan"><strong>2. Cara Kerja Perhitungan</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kegunaan-kode"><strong>3. Kegunaan Kode</strong></a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#memisahkan-outlier-dari-data"><strong>Memisahkan Outlier dari Data</strong></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><strong>1. Cara Perhitungan</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2"><strong>2. Cara Kerja Perhitungan</strong></a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#menghitung-akurasi-data"><strong>Menghitung Akurasi Data</strong></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#visualisasi-data"><strong>Visualisasi Data</strong></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#persiapan-data">1. <strong>Persiapan Data</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#membagi-data-training-dan-testing"><strong>2. Membagi Data Training dan Testing</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pembuatan-dan-pelatihan-model-knn"><strong>3. Pembuatan dan Pelatihan Model KNN</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluasi-model"><strong>4. Evaluasi Model</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualisasi-decision-boundary"><strong>5. Visualisasi Decision Boundary</strong></a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#implementasi-naive-bayes-pad-data"><strong>Implementasi Naive Bayes pad Data</strong></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3"><strong>1. Persiapan Data</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pelatihan-dan-evaluasi-model"><strong>2. Pelatihan dan Evaluasi Model</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualisasi-confusion-matrix"><strong>3. Visualisasi Confusion Matrix</strong></a></li>
 </ul>
 </li>
 </ul>
+
             </nav>
         </div>
     </div>
@@ -483,10 +498,8 @@ Jika terdapat data kategori, lakukan encoding agar bisa digunakan dalam perhitun
 <p>g. <strong>Evaluasi dan Penyesuaian</strong></p>
 <p>Sesuaikan nilai k atau metrik jarak jika hasil deteksi outlier belum optimal.
 Coba metode tambahan seperti DBSCAN atau Isolation Forest untuk membandingkan performa deteksi outlier.</p>
-</section>
-<section id="kesimpulan">
-<h2>Kesimpulan<a class="headerlink" href="#kesimpulan" title="Link to this heading">#</a></h2>
-<p>KNN dapat digunakan dalam tahap Data Understanding untuk mendeteksi outlier dengan menganalisis jarak antara suatu titik dengan tetangga terdekatnya. Dengan metode seperti K-Nearest Neighbor Distance dan Local Outlier Factor (LOF), kita dapat menandai data yang memiliki kepadatan rendah atau jauh dari data lainnya sebagai outlier. Pemilihan nilai K yang tepat dan metrik jarak yang sesuai menjadi faktor penting untuk keberhasilan deteksi outlier dengan KNN.</p>
+<p><strong>Kesimpulan</strong><br />
+KNN dapat digunakan dalam tahap Data Understanding untuk mendeteksi outlier dengan menganalisis jarak antara suatu titik dengan tetangga terdekatnya. Dengan metode seperti K-Nearest Neighbor Distance dan Local Outlier Factor (LOF), kita dapat menandai data yang memiliki kepadatan rendah atau jauh dari data lainnya sebagai outlier. Pemilihan nilai K yang tepat dan metrik jarak yang sesuai menjadi faktor penting untuk keberhasilan deteksi outlier dengan KNN.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">pip</span> install pymysql
@@ -519,8 +532,9 @@ Coba metode tambahan seperti DBSCAN atau Isolation Forest untuk membandingkan pe
 </div>
 <p>Kode diatas digunakan untuk menginstal dua pustaka Python, yaitu <code class="docutils literal notranslate"><span class="pre">pymysql</span></code> dan <code class="docutils literal notranslate"><span class="pre">psycopg2</span></code>, yang berfungsi sebagai konektor untuk basis data (database). Pustaka <code class="docutils literal notranslate"><span class="pre">pymysql</span></code> digunakan untuk menghubungkan aplikasi Python dengan database MySQL atau MariaDB menggunakan protokol MySQL asli. Sementara itu, <code class="docutils literal notranslate"><span class="pre">psycopg2</span></code> merupakan pustaka yang digunakan untuk menghubungkan Python dengan database PostgreSQL, menyediakan antarmuka yang efisien untuk menjalankan perintah SQL dan berinteraksi dengan database tersebut. Kedua perintah ini menggunakan <strong>magic command</strong> <code class="docutils literal notranslate"><span class="pre">%pip</span></code>, yang umumnya digunakan dalam lingkungan Jupyter Notebook untuk memastikan bahwa paket yang diperlukan diinstal dalam kernel yang sedang berjalan.</p>
 </section>
-<section id="code-untuk-menampilkan-semua-data-dan-grafiknya">
-<h2><strong>Code Untuk Menampilkan Semua Data dan Grafiknya</strong><a class="headerlink" href="#code-untuk-menampilkan-semua-data-dan-grafiknya" title="Link to this heading">#</a></h2>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="code-untuk-menampilkan-semua-data-dan-grafiknya">
+<h1><strong>Code Untuk Menampilkan Semua Data dan Grafiknya</strong><a class="headerlink" href="#code-untuk-menampilkan-semua-data-dan-grafiknya" title="Link to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">psycopg2</span>
@@ -786,7 +800,7 @@ Jumlah data setelah outlier dihapus : 142
 </div>
 </div>
 <section id="cara-perhitungan">
-<h3><strong>1. Cara Perhitungan</strong><a class="headerlink" href="#cara-perhitungan" title="Link to this heading">#</a></h3>
+<h2><strong>1. Cara Perhitungan</strong><a class="headerlink" href="#cara-perhitungan" title="Link to this heading">#</a></h2>
 <p>a Mengambil Data dari Database PostgreSQL &amp; MySQL</p>
 <ol class="arabic simple">
 <li><p>Kode mengambil data dari PostgreSQL (get_pg_data()) dan MySQL (get_mysql_data()).</p></li>
@@ -831,7 +845,7 @@ python</p></li>
 </ul>
 </section>
 <section id="cara-kerja-perhitungan">
-<h3><strong>2. Cara Kerja Perhitungan</strong><a class="headerlink" href="#cara-kerja-perhitungan" title="Link to this heading">#</a></h3>
+<h2><strong>2. Cara Kerja Perhitungan</strong><a class="headerlink" href="#cara-kerja-perhitungan" title="Link to this heading">#</a></h2>
 <p>Kode ini menggunakan metode K-Nearest Neighbors (KNN) Outlier Detection yang bekerja dengan mengukur jarak setiap titik ke tetangga terdekatnya. Berikut adalah langkah-langkahnya:</p>
 <ol class="arabic simple">
 <li><p>Ambil data dari dua database (PostgreSQL &amp; MySQL).</p></li>
@@ -844,7 +858,7 @@ python</p></li>
 </ol>
 </section>
 <section id="kegunaan-kode">
-<h3><strong>3. Kegunaan Kode</strong><a class="headerlink" href="#kegunaan-kode" title="Link to this heading">#</a></h3>
+<h2><strong>3. Kegunaan Kode</strong><a class="headerlink" href="#kegunaan-kode" title="Link to this heading">#</a></h2>
 <p>Kode ini berguna untuk:</p>
 <ol class="arabic simple">
 <li><p>Mengidentifikasi outlier dalam dataset berdasarkan jarak ke tetangga terdekat.</p></li>
@@ -853,8 +867,9 @@ python</p></li>
 <li><p>Memudahkan analisis data dengan visualisasi yang lebih bersih.</p></li>
 </ol>
 </section>
-<section id="memisahkan-outlier-dari-data">
-<h3><strong>Memisahkan Outlier dari Data</strong><a class="headerlink" href="#memisahkan-outlier-dari-data" title="Link to this heading">#</a></h3>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="memisahkan-outlier-dari-data">
+<h1><strong>Memisahkan Outlier dari Data</strong><a class="headerlink" href="#memisahkan-outlier-dari-data" title="Link to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">psycopg2</span>
@@ -1253,9 +1268,8 @@ Data tidak outlier :
 </div>
 </div>
 </div>
-</section>
 <section id="id1">
-<h3><strong>1. Cara Perhitungan</strong><a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<h2><strong>1. Cara Perhitungan</strong><a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
 <p>Kode ini menggunakan Local Outlier Factor (LOF) untuk mendeteksi outlier dalam dataset berdasarkan kepadatan lokal (local density). LOF bekerja dengan cara berikut:</p>
 <ol class="arabic simple">
 <li><p>Menghitung jarak ke tetangga terdekat</p></li>
@@ -1279,7 +1293,7 @@ Data tidak outlier :
 </ul>
 </section>
 <section id="id2">
-<h3><strong>2. Cara Kerja Perhitungan</strong><a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<h2><strong>2. Cara Kerja Perhitungan</strong><a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
 <p>Berikut adalah langkah-langkah utama dalam kode ini:</p>
 <p>a. Mengambil Data dari Database PostgreSQL &amp; MySQL</p>
 <ul class="simple">
@@ -1328,8 +1342,9 @@ Data tidak outlier :
 <li><p>Menampilkan data yang bukan outlier.</p></li>
 </ul>
 </section>
-<section id="menghitung-akurasi-data">
-<h3><strong>Menghitung Akurasi Data</strong><a class="headerlink" href="#menghitung-akurasi-data" title="Link to this heading">#</a></h3>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="menghitung-akurasi-data">
+<h1><strong>Menghitung Akurasi Data</strong><a class="headerlink" href="#menghitung-akurasi-data" title="Link to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">df_merged</span><span class="p">[</span><span class="n">feature_columns</span><span class="p">]</span>
@@ -1410,8 +1425,8 @@ Iris-versicolor       1.00      0.71      0.83         7
 <p>Kode di atas melakukan deteksi outlier menggunakan <strong>Local Outlier Factor (LOF)</strong> dan membandingkan performa model <strong>K-Nearest Neighbors (KNN)</strong> pada data dengan dan tanpa outlier. Pertama, data fitur numerik (<code class="docutils literal notranslate"><span class="pre">X</span></code>) dan label kelas (<code class="docutils literal notranslate"><span class="pre">y</span></code>) diekstrak dari dataset yang telah digabungkan (<code class="docutils literal notranslate"><span class="pre">df_merged</span></code>). Label kelas kemudian dikonversi menjadi nilai numerik menggunakan <strong>LabelEncoder</strong>. LOF digunakan untuk mengidentifikasi outlier dengan mempertimbangkan <strong>90 tetangga terdekat</strong> dan menetapkan <strong>10% dari data sebagai outlier</strong>. Data yang tidak terdeteksi sebagai outlier disimpan dalam <code class="docutils literal notranslate"><span class="pre">df_cleaned</span></code>, sementara data asli tetap digunakan untuk perbandingan.</p>
 <p>Selanjutnya, dataset dibagi menjadi <strong>data pelatihan (80%) dan pengujian (20%)</strong>, baik untuk dataset dengan outlier (<code class="docutils literal notranslate"><span class="pre">X_train_all,</span> <span class="pre">X_test_all</span></code>) maupun tanpa outlier (<code class="docutils literal notranslate"><span class="pre">X_train_clean,</span> <span class="pre">X_test_clean</span></code>). Model <strong>KNN (dengan 11 tetangga)</strong> diterapkan dalam <strong>pipeline yang mencakup StandardScaler</strong> untuk menormalkan data sebelum pelatihan. Model pertama dilatih dengan <strong>data yang masih mengandung outlier</strong>, lalu diuji, dan hasil akurasinya dicetak. Kemudian, model yang sama dilatih menggunakan <strong>data tanpa outlier</strong>, dan akurasinya dibandingkan. Evaluasi model dilakukan dengan <strong>classification report</strong>, yang menunjukkan metrik seperti <strong>precision, recall, dan F1-score</strong>. Hasil akhirnya memungkinkan perbandingan dampak penghapusan outlier terhadap performa klasifikasi KNN.</p>
 </section>
-<section id="visualisasi-data">
-<h3><strong>Visualisasi Data</strong><a class="headerlink" href="#visualisasi-data" title="Link to this heading">#</a></h3>
+<section class="tex2jax_ignore mathjax_ignore" id="visualisasi-data">
+<h1><strong>Visualisasi Data</strong><a class="headerlink" href="#visualisasi-data" title="Link to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -1506,9 +1521,8 @@ Iris-versicolor       1.00      0.86      0.92         7
 <p>Kode di atas bertujuan untuk melakukan klasifikasi data menggunakan algoritma K-Nearest Neighbors (KNN) dan memvisualisasikan decision boundary dari model yang telah dilatih. Pertama, kode mengambil dua fitur utama, yaitu “petal length” dan “petal width”, dari dataset df_cleaned, yang kemudian digunakan sebagai variabel prediktor (X). Sementara itu, kolom “class” digunakan sebagai target (y), yang kemudian dikonversi ke bentuk numerik menggunakan LabelEncoder. Setelah itu, data dibagi menjadi training set (80%) dan testing set (20%) menggunakan train_test_split.</p>
 <p>Selanjutnya, pipeline dibuat menggunakan StandardScaler (untuk normalisasi data) dan KNeighborsClassifier dengan jumlah tetangga (k=11). Model kemudian dilatih (fit) menggunakan data training, dan diuji (predict) pada data testing. Hasil evaluasi ditampilkan dengan akurasi serta classification report yang mencakup metrik seperti precision, recall, dan F1-score.</p>
 <p>Bagian terakhir dari kode berfokus pada visualisasi decision boundary untuk memahami bagaimana model KNN membagi area klasifikasi berdasarkan dua fitur utama. Dua jenis bobot (uniform dan distance) digunakan untuk membandingkan pengaruhnya dalam membentuk decision boundary. DecisionBoundaryDisplay digunakan untuk menampilkan hasil prediksi model dalam bentuk kontur warna yang menggambarkan area klasifikasi, sementara data asli ditampilkan sebagai titik-titik scatterplot dengan warna yang sesuai dengan kelasnya. Dengan visualisasi ini, pengguna dapat memahami bagaimana model KNN membedakan kelas berdasarkan pola distribusi data.</p>
-</section>
 <section id="persiapan-data">
-<h3>1. <strong>Persiapan Data</strong><a class="headerlink" href="#persiapan-data" title="Link to this heading">#</a></h3>
+<h2>1. <strong>Persiapan Data</strong><a class="headerlink" href="#persiapan-data" title="Link to this heading">#</a></h2>
 <ul class="simple">
 <li><p>emilihan fitur: Hanya dua fitur digunakan, yaitu “petal length” dan “petal width”, agar dapat divisualisasikan dalam decision boundary.</p></li>
 <li><p>Pemilihan target: Kolom “class” digunakan sebagai label target untuk klasifikasi.</p></li>
@@ -1516,14 +1530,14 @@ Iris-versicolor       1.00      0.86      0.92         7
 </ul>
 </section>
 <section id="membagi-data-training-dan-testing">
-<h3><strong>2. Membagi Data Training dan Testing</strong><a class="headerlink" href="#membagi-data-training-dan-testing" title="Link to this heading">#</a></h3>
+<h2><strong>2. Membagi Data Training dan Testing</strong><a class="headerlink" href="#membagi-data-training-dan-testing" title="Link to this heading">#</a></h2>
 <ul class="simple">
 <li><p>Data dibagi menjadi 80% training set dan 20% testing set.</p></li>
 <li><p>random_state=42 memastikan pembagian data tetap konsisten setiap kali kode dijalankan.</p></li>
 </ul>
 </section>
 <section id="pembuatan-dan-pelatihan-model-knn">
-<h3><strong>3. Pembuatan dan Pelatihan Model KNN</strong><a class="headerlink" href="#pembuatan-dan-pelatihan-model-knn" title="Link to this heading">#</a></h3>
+<h2><strong>3. Pembuatan dan Pelatihan Model KNN</strong><a class="headerlink" href="#pembuatan-dan-pelatihan-model-knn" title="Link to this heading">#</a></h2>
 <ul class="simple">
 <li><p>Pipeline digunakan untuk menghubungkan dua tahapan utama:</p></li>
 </ul>
@@ -1536,7 +1550,7 @@ Iris-versicolor       1.00      0.86      0.92         7
 </ul>
 </section>
 <section id="evaluasi-model">
-<h3><strong>4. Evaluasi Model</strong><a class="headerlink" href="#evaluasi-model" title="Link to this heading">#</a></h3>
+<h2><strong>4. Evaluasi Model</strong><a class="headerlink" href="#evaluasi-model" title="Link to this heading">#</a></h2>
 <ul class="simple">
 <li><p>Prediksi dilakukan pada data testing.</p></li>
 <li><p>Evaluasi model dilakukan dengan:</p></li>
@@ -1547,7 +1561,7 @@ Iris-versicolor       1.00      0.86      0.92         7
 </ol>
 </section>
 <section id="visualisasi-decision-boundary">
-<h3><strong>5. Visualisasi Decision Boundary</strong><a class="headerlink" href="#visualisasi-decision-boundary" title="Link to this heading">#</a></h3>
+<h2><strong>5. Visualisasi Decision Boundary</strong><a class="headerlink" href="#visualisasi-decision-boundary" title="Link to this heading">#</a></h2>
 <ul class="simple">
 <li><p>Dua subplot dibuat untuk membandingkan decision boundary dari dua skenario yang berbeda.</p></li>
 <li><p>Dua jenis bobot (weights) diuji:</p></li>
@@ -1727,6 +1741,10 @@ Iris-versicolor       0.62      0.71      0.67         7
 <img alt="_images/8befdbe26f902908d869ab91681efb10e959200f659b94c14a3e5c5ccb3bb09b.png" src="_images/8befdbe26f902908d869ab91681efb10e959200f659b94c14a3e5c5ccb3bb09b.png" />
 </div>
 </div>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="implementasi-naive-bayes-pad-data">
+<h1><strong>Implementasi Naive Bayes pad Data</strong><a class="headerlink" href="#implementasi-naive-bayes-pad-data" title="Link to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.naive_bayes</span> <span class="kn">import</span> <span class="n">GaussianNB</span>
@@ -1847,9 +1865,8 @@ Index: 25, True Label: Iris-virginica, Predicted: Iris-versicolor
 <img alt="_images/68973bee4dbd980af8b140e05fdf0426bdb05824327453c581d92203bcf660ab.png" src="_images/68973bee4dbd980af8b140e05fdf0426bdb05824327453c581d92203bcf660ab.png" />
 </div>
 </div>
-</section>
 <section id="id3">
-<h3><strong>1. Persiapan Data</strong><a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<h2><strong>1. Persiapan Data</strong><a class="headerlink" href="#id3" title="Link to this heading">#</a></h2>
 <ul class="simple">
 <li><p>Label encoding: Kolom “class” dikonversi ke bentuk numerik menggunakan LabelEncoder, sehingga dapat digunakan dalam model klasifikasi.</p></li>
 <li><p>Pembagian dataset:</p></li>
@@ -1863,7 +1880,7 @@ Index: 25, True Label: Iris-virginica, Predicted: Iris-versicolor
 </ul>
 </section>
 <section id="pelatihan-dan-evaluasi-model">
-<h3><strong>2. Pelatihan dan Evaluasi Model</strong><a class="headerlink" href="#pelatihan-dan-evaluasi-model" title="Link to this heading">#</a></h3>
+<h2><strong>2. Pelatihan dan Evaluasi Model</strong><a class="headerlink" href="#pelatihan-dan-evaluasi-model" title="Link to this heading">#</a></h2>
 <ul class="simple">
 <li><p>Inisialisasi model Gaussian Naïve Bayes (gnb):</p></li>
 <li><p>Model dilatih menggunakan fit(X_train, y_train).</p></li>
@@ -1883,7 +1900,7 @@ Index: 25, True Label: Iris-virginica, Predicted: Iris-versicolor
 </ul>
 </section>
 <section id="visualisasi-confusion-matrix">
-<h3><strong>3. Visualisasi Confusion Matrix</strong><a class="headerlink" href="#visualisasi-confusion-matrix" title="Link to this heading">#</a></h3>
+<h2><strong>3. Visualisasi Confusion Matrix</strong><a class="headerlink" href="#visualisasi-confusion-matrix" title="Link to this heading">#</a></h2>
 <ul class="simple">
 <li><p>Dua confusion matrix dibuat menggunakan sns.heatmap():</p></li>
 <li><p>Sebelah kiri: Confusion matrix untuk dataset dengan outlier.</p></li>
@@ -1892,7 +1909,6 @@ Index: 25, True Label: Iris-virginica, Predicted: Iris-versicolor
 <li><p>Confusion matrix menunjukkan jumlah sampel yang diklasifikasikan benar dan salah untuk setiap kelas.</p></li>
 <li><p>Jika confusion matrix tanpa outlier lebih bersih (lebih sedikit kesalahan klasifikasi), berarti penghapusan outlier meningkatkan performa model.</p></li>
 </ul>
-</section>
 </section>
 </section>
 
@@ -1960,29 +1976,39 @@ Index: 25, True Label: Iris-virginica, Predicted: Iris-versicolor
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#"><strong>Deteksi Outlier dengan K-Nearest Neighbors (KNN) dalam Data Understanding</strong></a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mengapa-knn-bisa-digunakan-untuk-deteksi-outlier">1. Mengapa KNN Bisa Digunakan untuk Deteksi Outlier?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-langkah-deteksi-outlier-dengan-knn">2. Langkah-Langkah Deteksi Outlier dengan KNN</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kesimpulan">Kesimpulan</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#code-untuk-menampilkan-semua-data-dan-grafiknya"><strong>Code Untuk Menampilkan Semua Data dan Grafiknya</strong></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cara-perhitungan"><strong>1. Cara Perhitungan</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cara-kerja-perhitungan"><strong>2. Cara Kerja Perhitungan</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kegunaan-kode"><strong>3. Kegunaan Kode</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#memisahkan-outlier-dari-data"><strong>Memisahkan Outlier dari Data</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><strong>1. Cara Perhitungan</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2"><strong>2. Cara Kerja Perhitungan</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#menghitung-akurasi-data"><strong>Menghitung Akurasi Data</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualisasi-data"><strong>Visualisasi Data</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#persiapan-data">1. <strong>Persiapan Data</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#membagi-data-training-dan-testing"><strong>2. Membagi Data Training dan Testing</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pembuatan-dan-pelatihan-model-knn"><strong>3. Pembuatan dan Pelatihan Model KNN</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluasi-model"><strong>4. Evaluasi Model</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualisasi-decision-boundary"><strong>5. Visualisasi Decision Boundary</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3"><strong>1. Persiapan Data</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pelatihan-dan-evaluasi-model"><strong>2. Pelatihan dan Evaluasi Model</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualisasi-confusion-matrix"><strong>3. Visualisasi Confusion Matrix</strong></a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#code-untuk-menampilkan-semua-data-dan-grafiknya"><strong>Code Untuk Menampilkan Semua Data dan Grafiknya</strong></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cara-perhitungan"><strong>1. Cara Perhitungan</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cara-kerja-perhitungan"><strong>2. Cara Kerja Perhitungan</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kegunaan-kode"><strong>3. Kegunaan Kode</strong></a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#memisahkan-outlier-dari-data"><strong>Memisahkan Outlier dari Data</strong></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><strong>1. Cara Perhitungan</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2"><strong>2. Cara Kerja Perhitungan</strong></a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#menghitung-akurasi-data"><strong>Menghitung Akurasi Data</strong></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#visualisasi-data"><strong>Visualisasi Data</strong></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#persiapan-data">1. <strong>Persiapan Data</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#membagi-data-training-dan-testing"><strong>2. Membagi Data Training dan Testing</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pembuatan-dan-pelatihan-model-knn"><strong>3. Pembuatan dan Pelatihan Model KNN</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluasi-model"><strong>4. Evaluasi Model</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualisasi-decision-boundary"><strong>5. Visualisasi Decision Boundary</strong></a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#implementasi-naive-bayes-pad-data"><strong>Implementasi Naive Bayes pad Data</strong></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3"><strong>1. Persiapan Data</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pelatihan-dan-evaluasi-model"><strong>2. Pelatihan dan Evaluasi Model</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualisasi-confusion-matrix"><strong>3. Visualisasi Confusion Matrix</strong></a></li>
 </ul>
 </li>
 </ul>
+
   </nav></div>
 
 </div></div>
