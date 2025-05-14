@@ -1,0 +1,1661 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Algoritma K-Means &#8212; Penambangan Data</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'K-Means';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Data Understanding" href="uts_pendat.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/Pas Foto BG Merah.jpeg" class="logo__image only-light" alt="Penambangan Data - Home"/>
+    <script>document.write(`<img src="_static/Pas Foto BG Merah.jpeg" class="logo__image only-dark" alt="Penambangan Data - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Penambangan Data
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="tugas1.html">Tugas 1 Pendata</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="Tugas2.html"><strong>OUTLINER DETEKSI</strong></a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="KNN.html"><strong>Deteksi Outlier dengan K-Nearest Neighbors (KNN) dalam Data Understanding</strong></a></li>
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="LOF.html"><strong>Deteksi Outlier dengan metode Local Outlier Factor (LOF) dalam Data Understanding</strong></a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="uts_pendat.html">Data Understanding</a></li>
+
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><strong>Algoritma <em>K-Means</em></strong></a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FK-Means.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/K-Means.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Algoritma K-Means</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pengertian-k-means-clustering"><strong>Pengertian <em>K-Means Clustering</em></strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#manfaat-clustering"><strong>Manfaat <em>Clustering</em></strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inertia-sum-square-error-sse"><strong>Inertia (Sum Square error/SSE)</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#silhouette-analysis"><strong>Silhouette Analysis</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementasi-dengan-menggunakan-data-iris"><strong>Implementasi dengan menggunakan data Iris</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#library-yang-digunakan"><strong>Library yang digunakan</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pengumpulan-data"><strong>Pengumpulan Data</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#clustering-pada-data-iris-menggunakan-k-means-dengan-jumlah-cluster-2-3-dan-4"><strong>Clustering pada data Iris menggunakan K-Means dengan jumlah cluster 2,3 dan 4</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-plotting-dengan-jumlah-cluster-2-3-dan-4"><strong>Model Plotting dengan Jumlah Cluster 2, 3 dan 4</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#menghitung-inertia-untuk-jumlah-cluster-2-3-dan-4"><strong>Menghitung Inertia untuk Jumlah Cluster 2,3 dan 4</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-plotting-diagram-elbow-method"><strong>Model Plotting Diagram Elbow Method</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#menghitung-silhouette-score-untuk-jumlah-cluster-2-3-dan-4"><strong>Menghitung Silhouette Score untuk Jumlah Cluster 2,3 dan 4</strong></a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="algoritma-k-means">
+<h1><strong>Algoritma <em>K-Means</em></strong><a class="headerlink" href="#algoritma-k-means" title="Link to this heading">#</a></h1>
+<section id="pengertian-k-means-clustering">
+<h2><strong>Pengertian <em>K-Means Clustering</em></strong><a class="headerlink" href="#pengertian-k-means-clustering" title="Link to this heading">#</a></h2>
+<p>K-Means Clustering adalah salah satu algoritma unsupervised learning yang paling populer dalam bidang data mining dan machine learning. Tujuan dari algoritma ini adalah untuk mengelompokkan sekumpulan data ke dalam sejumlah kelompok (cluster) berdasarkan kemiripan atau kedekatan karakteristiknya.
+Disebut “K-Means” karena:</p>
+<ul class="simple">
+<li><p>K adalah jumlah cluster yang ingin dibentuk (ditentukan oleh pengguna),
+dan Means merujuk pada metode rata-rata (mean) yang digunakan untuk menemukan pusat dari setiap cluster.</p></li>
+</ul>
+</section>
+<section id="manfaat-clustering">
+<h2><strong>Manfaat <em>Clustering</em></strong><a class="headerlink" href="#manfaat-clustering" title="Link to this heading">#</a></h2>
+<p><strong>1. Menemukan Pola Tersembunyi dalam Data</strong></p>
+<p>Clustering membantu mengidentifikasi pola-pola alami dalam data yang tidak terlihat secara eksplisit. Ini berguna dalam eksplorasi data awal (exploratory data analysis).</p>
+<p><strong>2. Segmentasi Data</strong></p>
+<p>Clustering digunakan untuk membagi data besar menjadi kelompok-kelompok lebih kecil yang memiliki karakteristik serupa, misalnya:</p>
+<ul class="simple">
+<li><p>Segmentasi pelanggan berdasarkan perilaku belanja</p></li>
+<li><p>Segmentasi pasar atau wilayah geografis</p></li>
+</ul>
+<p><strong>3. Reduksi Dimensi dan Ringkasan Data</strong></p>
+<p>Dengan mengelompokkan data ke dalam beberapa cluster, kita bisa meringkas data yang besar dan kompleks menjadi representasi yang lebih sederhana (cluster centroid).</p>
+<p><strong>4. Peningkatan Efisiensi Sistem</strong></p>
+<p>Dalam sistem pencarian, rekomendasi, atau kompresi data, clustering dapat meningkatkan efisiensi karena hanya perlu memperhatikan representasi cluster, bukan seluruh dataset.</p>
+<p><strong>5. Preprocessing untuk Algoritma Lain</strong></p>
+<p>Clustering sering digunakan sebagai tahapan awal (preprocessing) untuk algoritma lain seperti:</p>
+<ul class="simple">
+<li><p>Classification (klasifikasi)</p></li>
+<li><p>Anomaly Detection (deteksi anomali)</p></li>
+<li><p>Recommendation System</p></li>
+</ul>
+</section>
+<section id="inertia-sum-square-error-sse">
+<h2><strong>Inertia (Sum Square error/SSE)</strong><a class="headerlink" href="#inertia-sum-square-error-sse" title="Link to this heading">#</a></h2>
+<p>Dalam konteks algoritma <em>K-Means Clustering</em>, <em>inertia</em> (Sum Square error/SSE) adalah salah satu metrik evaluasi untuk menilai seberapa baik data dikelompokkan ke dalam klaster serta mengukur jumlah total jarak kuadrat antara setiap titik data dan pusat klaster (centroid) tempat titik tersebut.</p>
+<p>Inertia didefinisikan sebagai:</p>
+<div class="math notranslate nohighlight">
+\[
+\text{Inertia} = \sum_{i=1}^{n} \left\| x_i - \mu_{c_i} \right\|^2
+\]</div>
+<p><strong>Penjelasan Notasi</strong></p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(x_i\)</span>: Titik data ke-<span class="math notranslate nohighlight">\(i\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mu_{c_i}\)</span>: Centroid dari klaster tempat <span class="math notranslate nohighlight">\(x_i\)</span> berada</p></li>
+<li><p><span class="math notranslate nohighlight">\(\left\| x_i - \mu_{c_i} \right\|^2\)</span>: Jarak Euclidean kuadrat antara <span class="math notranslate nohighlight">\(x_i\)</span> dan centroid-nya</p></li>
+<li><p><span class="math notranslate nohighlight">\(n\)</span>: Jumlah total data</p></li>
+</ul>
+</section>
+<section id="silhouette-analysis">
+<h2><strong>Silhouette Analysis</strong><a class="headerlink" href="#silhouette-analysis" title="Link to this heading">#</a></h2>
+<p>Silhouette Analysis adalah metrik evaluasi lain yang lebih baik dari inertia dalam banyak kasus untuk mengevaluasi hasil clustering, seperti pada K-Means, karena mempertimbangkan dua hal sekaligus yaitu:</p>
+<ul class="simple">
+<li><p>Kepadatan dalam klaster</p></li>
+<li><p>Jarak antar klaster</p></li>
+</ul>
+<p>Silhouette Analysis mengukur seberapa mirip suatu titik data dengan klasternya sendiri dibandingkan dengan klaster terdekat lainnya. Rumusnya adalah:</p>
+<div class="math notranslate nohighlight">
+\[
+s(i) = \frac{b(i) - a(i)}{\max(a(i), b(i))}
+\]</div>
+<p><strong>Penjelasan Notasi</strong>:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(a(i)\)</span>: Rata-rata jarak dari titik <span class="math notranslate nohighlight">\(i\)</span> ke semua titik lain dalam klaster yang sama (cohesion)</p></li>
+<li><p><span class="math notranslate nohighlight">\(b(i)\)</span>: Rata-rata jarak dari titik <span class="math notranslate nohighlight">\(i\)</span> ke semua titik dalam klaster terdekat yang bukan miliknya (separation)</p></li>
+<li><p><span class="math notranslate nohighlight">\(s(i)\)</span>: Skor silhouette untuk titik <span class="math notranslate nohighlight">\(i\)</span>, dengan nilai antara -1 dan 1</p></li>
+</ul>
+<p>Nilai skor <span class="math notranslate nohighlight">\(s(i)\)</span> ditafsirkan sebagai berikut:</p>
+<ul class="simple">
+<li><p>Jika <span class="math notranslate nohighlight">\(s(i) \approx 1\)</span>, maka titik berada jauh dari klaster lain dan cocok dengan klasternya</p></li>
+<li><p>Jika <span class="math notranslate nohighlight">\(s(i) \approx 0\)</span>, maka titik berada di antara dua klaster</p></li>
+<li><p>Jika <span class="math notranslate nohighlight">\(s(i) \approx -1\)</span>, maka titik bisa jadi salah masuk klaster</p></li>
+</ul>
+<p>Untuk mengevaluasi seluruh hasil clustering, digunakan rata-rata dari semua <span class="math notranslate nohighlight">\(s(i)\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+S = \frac{1}{n} \sum_{i=1}^{n} s(i)
+\]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(n\)</span>: Jumlah total data</p></li>
+<li><p><span class="math notranslate nohighlight">\(S\)</span>: Silhouette score rata-rata seluruh data</p></li>
+</ul>
+</section>
+<section id="implementasi-dengan-menggunakan-data-iris">
+<h2><strong>Implementasi dengan menggunakan data Iris</strong><a class="headerlink" href="#implementasi-dengan-menggunakan-data-iris" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">pip</span> install pymysql
+<span class="o">%</span><span class="k">pip</span> install psycopg2
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: pymysql in /usr/local/python/3.12.1/lib/python3.12/site-packages (1.1.1)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold">[</span><span class=" -Color -Color-Blue">notice</span><span class=" -Color -Color-Bold">]</span> A new release of pip is available: <span class=" -Color -Color-Red">24.3.1</span> -&gt; <span class=" -Color -Color-Green">25.1.1</span>
+<span class=" -Color -Color-Bold">[</span><span class=" -Color -Color-Blue">notice</span><span class=" -Color -Color-Bold">]</span> To update, run: <span class=" -Color -Color-Green">python3 -m pip install --upgrade pip</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Note: you may need to restart the kernel to use updated packages.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: psycopg2 in /usr/local/python/3.12.1/lib/python3.12/site-packages (2.9.10)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold">[</span><span class=" -Color -Color-Blue">notice</span><span class=" -Color -Color-Bold">]</span> A new release of pip is available: <span class=" -Color -Color-Red">24.3.1</span> -&gt; <span class=" -Color -Color-Green">25.1.1</span>
+<span class=" -Color -Color-Bold">[</span><span class=" -Color -Color-Blue">notice</span><span class=" -Color -Color-Bold">]</span> To update, run: <span class=" -Color -Color-Green">python3 -m pip install --upgrade pip</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Note: you may need to restart the kernel to use updated packages.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="library-yang-digunakan">
+<h2><strong>Library yang digunakan</strong><a class="headerlink" href="#library-yang-digunakan" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">KMeans</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">adjusted_rand_score</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">silhouette_score</span>
+<span class="kn">import</span> <span class="nn">psycopg2</span>
+<span class="kn">import</span> <span class="nn">pymysql</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="pengumpulan-data">
+<h2><strong>Pengumpulan Data</strong><a class="headerlink" href="#pengumpulan-data" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_pg_data</span><span class="p">():</span>
+    <span class="n">conn</span> <span class="o">=</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+        <span class="n">host</span><span class="o">=</span><span class="s2">&quot;pg-292ef6f0-postgesql.d.aivencloud.com&quot;</span><span class="p">,</span>
+        <span class="n">user</span><span class="o">=</span><span class="s2">&quot;avnadmin&quot;</span><span class="p">,</span>
+        <span class="n">password</span><span class="o">=</span><span class="s2">&quot;AVNS_iFCt7xp02vTczdlhooY&quot;</span><span class="p">,</span>
+        <span class="n">database</span><span class="o">=</span><span class="s2">&quot;defaultdb&quot;</span><span class="p">,</span>
+        <span class="n">port</span><span class="o">=</span><span class="mi">16905</span>
+    <span class="p">)</span>
+    <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM firmandani.postgree&quot;</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+    <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">desc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">desc</span> <span class="ow">in</span> <span class="n">cursor</span><span class="o">.</span><span class="n">description</span><span class="p">]</span>
+    <span class="n">cursor</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span>
+
+<span class="c1"># Fungsi untuk mengambil data dari MySQL</span>
+<span class="k">def</span> <span class="nf">get_mysql_data</span><span class="p">():</span>
+    <span class="n">conn</span> <span class="o">=</span> <span class="n">pymysql</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+        <span class="n">host</span><span class="o">=</span><span class="s2">&quot;mysql-ef66224-mmsql.d.aivencloud.com&quot;</span><span class="p">,</span>
+        <span class="n">user</span><span class="o">=</span><span class="s2">&quot;avnadmin&quot;</span><span class="p">,</span>
+        <span class="n">password</span><span class="o">=</span><span class="s2">&quot;AVNS_NrOpqQJhytxwdcC6shv&quot;</span><span class="p">,</span>
+        <span class="n">database</span><span class="o">=</span><span class="s2">&quot;defaultdb&quot;</span><span class="p">,</span>
+        <span class="n">port</span><span class="o">=</span><span class="mi">21910</span>
+    <span class="p">)</span>
+    <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM flowers&quot;</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+    <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">desc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">desc</span> <span class="ow">in</span> <span class="n">cursor</span><span class="o">.</span><span class="n">description</span><span class="p">]</span>
+    <span class="n">cursor</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span>
+
+<span class="c1"># Ambil data dari kedua database</span>
+<span class="n">df_postgresql</span> <span class="o">=</span> <span class="n">get_pg_data</span><span class="p">()</span>
+<span class="n">df_mysql</span> <span class="o">=</span> <span class="n">get_mysql_data</span><span class="p">()</span>
+<span class="n">df_postgresql</span> <span class="o">=</span> <span class="n">df_postgresql</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Class&#39;</span><span class="p">:</span> <span class="s1">&#39;class&#39;</span><span class="p">})</span>
+
+<span class="c1"># Gabungkan berdasarkan kolom &#39;id&#39; dan &#39;Class&#39;</span>
+<span class="n">df_merged</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df_mysql</span><span class="p">,</span> <span class="n">df_postgresql</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;class&quot;</span><span class="p">],</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;inner&quot;</span><span class="p">)</span>
+
+<span class="c1"># Cetak semua data hasil gabungan tanpa indeks</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df_merged</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> id           class  petal length  petal width  sepal length  sepal width
+  1     Iris-setosa           1.3          0.2           5.1          3.5
+  2     Iris-setosa         122.0        123.0         223.0        121.0
+  3     Iris-setosa         234.0        241.0         121.0        142.0
+  4     Iris-setosa         210.0        423.0         135.0       1423.0
+  5     Iris-setosa         233.0        230.0         123.0        241.0
+  6     Iris-setosa         201.0        221.0         521.0        123.0
+  7     Iris-setosa           1.4          0.3           4.6          3.4
+  8     Iris-setosa           1.0          0.2           5.0          3.4
+  9     Iris-setosa           4.0          0.2           5.0          2.9
+ 10     Iris-setosa           1.5          0.3           4.9          3.1
+ 11     Iris-setosa           1.5          0.2           5.4          3.7
+ 12     Iris-setosa           1.6          0.3           4.8          3.4
+ 13     Iris-setosa           4.3          0.1           4.8          3.0
+ 14     Iris-setosa           7.5          0.1           4.3          3.0
+ 15     Iris-setosa           1.2          0.2           5.8          4.0
+ 16     Iris-setosa           1.5          0.4           5.7          4.4
+ 17     Iris-setosa           1.3          0.4           5.4          3.9
+ 18     Iris-setosa           1.4          0.3           5.1          3.5
+ 19     Iris-setosa           1.7          0.3           5.7          3.8
+ 20     Iris-setosa           1.5          0.3           5.1          3.8
+ 21     Iris-setosa           1.7          0.2           5.4          3.4
+ 22     Iris-setosa           1.5          0.4           5.1          3.7
+ 23     Iris-setosa           1.0          0.2           4.6          3.6
+ 24     Iris-setosa           1.7          0.5           5.1          3.3
+ 25     Iris-setosa           1.9          0.2           4.8          3.4
+ 26     Iris-setosa           1.6          0.2           5.0          3.0
+ 27     Iris-setosa           1.6          0.4           5.0          3.4
+ 28     Iris-setosa           1.5          0.2           5.2          3.5
+ 29     Iris-setosa           1.4          0.2           5.2          3.4
+ 30     Iris-setosa           1.6          0.2           4.7          3.2
+ 31     Iris-setosa           1.6          0.2           4.8          3.1
+ 32     Iris-setosa           1.5          0.4           5.4          3.4
+ 33     Iris-setosa           1.5          0.1           5.2          4.1
+ 34     Iris-setosa           1.4          0.2           5.5          4.2
+ 35     Iris-setosa           1.5          0.1           4.9          3.1
+ 36     Iris-setosa           1.2          0.2           5.0          3.2
+ 37     Iris-setosa           1.3          0.2           5.5          3.5
+ 38     Iris-setosa           1.5          0.1           4.9          3.1
+ 39     Iris-setosa           1.3          0.2           4.4          3.0
+ 40     Iris-setosa           1.5          0.2           5.1          3.4
+ 41     Iris-setosa           1.3          0.3           5.0          3.5
+ 42     Iris-setosa           1.3          0.3           4.5          2.3
+ 43     Iris-setosa           1.3          0.2           4.4          3.2
+ 44     Iris-setosa           1.6          0.6           5.0          3.5
+ 45     Iris-setosa           1.9          0.4           5.1          3.8
+ 46     Iris-setosa           1.4          0.3           4.8          3.0
+ 47     Iris-setosa           1.6          0.2           5.1          3.8
+ 48     Iris-setosa           1.4          0.2           4.6          3.2
+ 49     Iris-setosa           1.5          0.2           5.3          3.7
+ 50     Iris-setosa           1.4          0.2           5.0          3.3
+ 51 Iris-versicolor         124.0        231.0         210.0        201.0
+ 52 Iris-versicolor         212.0        201.0         120.0        311.0
+ 53 Iris-versicolor         310.0        414.0         125.0        144.0
+ 54 Iris-versicolor         322.0        140.0         122.0        110.0
+ 55 Iris-versicolor         112.0        312.0         211.0        112.0
+ 56 Iris-versicolor           4.5          1.3           5.7          2.8
+ 57 Iris-versicolor           4.7          1.6           6.3          3.3
+ 58 Iris-versicolor           3.3          1.0           4.9          2.4
+ 59 Iris-versicolor           4.6          1.3           6.6          2.9
+ 60 Iris-versicolor           3.9          1.4           5.2          2.7
+ 61 Iris-versicolor           3.5          1.0           5.0          2.0
+ 62 Iris-versicolor           4.2          1.5           5.9          3.0
+ 63 Iris-versicolor           4.0          1.0           6.0          2.2
+ 64 Iris-versicolor           4.7          1.4           6.1          2.9
+ 65 Iris-versicolor           3.6          1.3           5.6          2.9
+ 66 Iris-versicolor           4.4          1.4           6.7          3.1
+ 67 Iris-versicolor           4.5          1.5           5.6          3.0
+ 68 Iris-versicolor           4.1          1.0           5.8          2.7
+ 69 Iris-versicolor           4.5          1.5           6.2          2.2
+ 70 Iris-versicolor           3.9          1.1           5.6          2.5
+ 71 Iris-versicolor           4.8          1.8           5.9          3.2
+ 72 Iris-versicolor           4.0          1.3           6.1          2.8
+ 73 Iris-versicolor           4.9          1.5           6.3          2.5
+ 74 Iris-versicolor           4.7          1.2           6.1          2.8
+ 75 Iris-versicolor           4.3          1.3           6.4          2.9
+ 76 Iris-versicolor           4.4          1.4           6.6          3.0
+ 77 Iris-versicolor           4.8          1.4           6.8          2.8
+ 78 Iris-versicolor           5.0          1.7           6.7          3.0
+ 79 Iris-versicolor           4.5          1.5           6.0          2.9
+ 80 Iris-versicolor           3.5          1.0           5.7          2.6
+ 81 Iris-versicolor           3.8          1.1           5.5          2.4
+ 82 Iris-versicolor           3.7          1.0           5.5          2.4
+ 83 Iris-versicolor           3.9          1.2           5.8          2.7
+ 84 Iris-versicolor           5.1          1.6           6.0          2.7
+ 85 Iris-versicolor           4.5          1.5           5.4          3.0
+ 86 Iris-versicolor           4.5          1.6           6.0          3.4
+ 87 Iris-versicolor           4.7          1.5           6.7          3.1
+ 88 Iris-versicolor           4.4          1.3           6.3          2.3
+ 89 Iris-versicolor           4.1          1.3           5.6          3.0
+ 90 Iris-versicolor           4.0          1.3           5.5          2.5
+ 91 Iris-versicolor           4.4          1.2           5.5          2.6
+ 92 Iris-versicolor           4.6          1.4           6.1          3.0
+ 93 Iris-versicolor           4.0          1.2           5.8          2.6
+ 94 Iris-versicolor           3.3          1.0           5.0          2.3
+ 95 Iris-versicolor           4.2          1.3           5.6          2.7
+ 96 Iris-versicolor           4.2          1.2           5.7          3.0
+ 97 Iris-versicolor           4.2          1.3           5.7          2.9
+ 98 Iris-versicolor           4.3          1.3           6.2          2.9
+ 99 Iris-versicolor           3.0          1.1           5.1          2.5
+100 Iris-versicolor           4.1          1.3           5.0          2.6
+101  Iris-virginica         121.0        134.0         122.0        112.0
+102  Iris-virginica         134.0        231.0         221.0        110.0
+103  Iris-virginica         123.0        234.0         113.0        112.0
+104  Iris-virginica         210.0        253.0         123.0        221.0
+105  Iris-virginica         240.0        124.0         333.0        211.0
+106  Iris-virginica           6.6          2.1           7.6          3.0
+107  Iris-virginica           4.5          1.7           4.9          2.5
+108  Iris-virginica           6.3          1.8           7.3          2.9
+109  Iris-virginica           5.8          1.8           6.7          2.5
+110  Iris-virginica           6.1          2.5           7.2          3.6
+111  Iris-virginica           5.1          2.0           6.5          3.2
+112  Iris-virginica           5.3          1.9           6.4          2.7
+113  Iris-virginica           5.5          2.1           6.8          3.0
+114  Iris-virginica           5.0          2.0           5.7          2.5
+115  Iris-virginica           5.1          2.4           5.8          2.8
+116  Iris-virginica           5.3          2.3           6.4          3.2
+117  Iris-virginica           5.5          1.8           6.5          3.0
+118  Iris-virginica           6.7          2.2           7.7          3.8
+119  Iris-virginica           6.9          2.3           7.7          2.6
+120  Iris-virginica           5.0          1.5           6.0          2.2
+121  Iris-virginica           5.7          2.3           6.9          3.2
+122  Iris-virginica           4.9          2.0           5.6          2.8
+123  Iris-virginica           6.7          2.0           7.7          2.8
+124  Iris-virginica           4.9          1.8           6.3          2.7
+125  Iris-virginica           5.7          2.1           6.7          3.3
+126  Iris-virginica           6.0          1.8           7.2          3.2
+127  Iris-virginica           4.8          1.8           6.2          2.8
+128  Iris-virginica           4.9          1.8           6.1          3.0
+129  Iris-virginica           5.6          2.1           6.4          2.8
+130  Iris-virginica           5.8          1.6           7.2          3.0
+131  Iris-virginica           6.1          1.9           7.4          2.8
+132  Iris-virginica           6.4          2.0           7.9          3.8
+133  Iris-virginica           5.6          2.2           6.4          2.8
+134  Iris-virginica           5.1          1.5           6.3          2.8
+135  Iris-virginica           5.6          1.4           6.1          2.6
+136  Iris-virginica           6.1          2.3           7.7          3.0
+137  Iris-virginica           5.6          2.4           6.3          3.4
+138  Iris-virginica           5.5          1.8           6.4          3.1
+139  Iris-virginica           4.8          1.8           6.0          3.0
+140  Iris-virginica           5.4          2.1           6.9          3.1
+141  Iris-virginica           5.6          2.4           6.7          3.1
+142  Iris-virginica           5.1          2.3           6.9          3.1
+143  Iris-virginica           5.1          1.9           5.8          2.7
+144  Iris-virginica           5.9          2.3           6.8          3.2
+145  Iris-virginica           5.7          2.5           6.7          3.3
+146  Iris-virginica           5.2          2.3           6.7          3.0
+147  Iris-virginica           5.0          1.9           6.3          2.5
+148  Iris-virginica           5.2          2.0           6.5          3.0
+149  Iris-virginica           5.4          2.3           6.2          3.4
+150  Iris-virginica           5.1          1.8           5.9          3.0
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="clustering-pada-data-iris-menggunakan-k-means-dengan-jumlah-cluster-2-3-dan-4">
+<h2><strong>Clustering pada data Iris menggunakan K-Means dengan jumlah cluster 2,3 dan 4</strong><a class="headerlink" href="#clustering-pada-data-iris-menggunakan-k-means-dengan-jumlah-cluster-2-3-dan-4" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. Siapkan fitur (X) dan label (y)</span>
+<span class="n">feature_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;sepal length&#39;</span><span class="p">,</span> <span class="s1">&#39;sepal width&#39;</span><span class="p">,</span> <span class="s1">&#39;petal length&#39;</span><span class="p">,</span> <span class="s1">&#39;petal width&#39;</span><span class="p">]</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">df_merged</span><span class="p">[</span><span class="n">feature_names</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df_merged</span><span class="p">[</span><span class="s1">&#39;class&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;category&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">codes</span><span class="o">.</span><span class="n">values</span>  <span class="c1"># label dikodekan ke angka</span>
+
+<span class="c1"># 2. Standarisasi</span>
+<span class="n">scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+<span class="n">X_scaled</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="c1"># 3. Fungsi clustering</span>
+<span class="k">def</span> <span class="nf">perform_kmeans</span><span class="p">(</span><span class="n">X_scaled</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+    <span class="n">kmeans</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="n">kmeans</span><span class="o">.</span><span class="n">fit_predict</span><span class="p">(</span><span class="n">X_scaled</span><span class="p">)</span>
+    <span class="n">centroids</span> <span class="o">=</span> <span class="n">kmeans</span><span class="o">.</span><span class="n">cluster_centers_</span>
+    <span class="n">accuracy</span> <span class="o">=</span> <span class="n">adjusted_rand_score</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Hasil K-Means dengan </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> Klaster:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Centroids:</span><span class="se">\n</span><span class="si">{</span><span class="n">centroids</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Akurasi (Adjusted Rand Score): </span><span class="si">{</span><span class="n">accuracy</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">labels</span><span class="p">,</span> <span class="n">centroids</span><span class="p">,</span> <span class="n">accuracy</span>
+
+<span class="c1"># 4. Jalankan clustering</span>
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]:</span>
+    <span class="n">perform_kmeans</span><span class="p">(</span><span class="n">X_scaled</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Hasil K-Means dengan 2 Klaster:
+Centroids:
+[[-0.28297728 -0.19494245 -0.31250581 -0.30912184]
+ [ 2.5467955   1.75448205  2.8125523   2.78209656]]
+Akurasi (Adjusted Rand Score): -0.003
+
+Hasil K-Means dengan 3 Klaster:
+Centroids:
+[[-0.28297728 -0.19494245 -0.31250581 -0.30912184]
+ [ 2.60575987  1.08079046  2.79360223  2.60307131]
+ [ 1.72129425 11.18616424  3.07785329  5.28845   ]]
+Akurasi (Adjusted Rand Score): -0.002
+
+Hasil K-Means dengan 4 Klaster:
+Centroids:
+[[-0.28297728 -0.19494245 -0.31250581 -0.30912184]
+ [ 1.50599669  1.1762565   3.25257373  2.73885687]
+ [ 1.72129425 11.18616424  3.07785329  5.28845   ]
+ [ 4.07211078  0.95350241  2.18164023  2.42202389]]
+Akurasi (Adjusted Rand Score): -0.003
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="model-plotting-dengan-jumlah-cluster-2-3-dan-4">
+<h2><strong>Model Plotting dengan Jumlah Cluster 2, 3 dan 4</strong><a class="headerlink" href="#model-plotting-dengan-jumlah-cluster-2-3-dan-4" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. Siapkan fitur (X) dan label (y)</span>
+<span class="n">feature_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;sepal length&#39;</span><span class="p">,</span> <span class="s1">&#39;sepal width&#39;</span><span class="p">,</span> <span class="s1">&#39;petal length&#39;</span><span class="p">,</span> <span class="s1">&#39;petal width&#39;</span><span class="p">]</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">df_merged</span><span class="p">[</span><span class="n">feature_names</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df_merged</span><span class="p">[</span><span class="s1">&#39;class&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;category&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">codes</span><span class="o">.</span><span class="n">values</span>  <span class="c1"># label dikodekan ke angka</span>
+
+<span class="c1"># 2. Standarisasi data</span>
+<span class="n">scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+<span class="n">X_scaled</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="c1"># 3. Fungsi untuk melakukan K-Means, plotting dan menampilkan centroid</span>
+<span class="k">def</span> <span class="nf">perform_kmeans_plot</span><span class="p">(</span><span class="n">X_scaled</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+    <span class="n">kmeans</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="n">kmeans</span><span class="o">.</span><span class="n">fit_predict</span><span class="p">(</span><span class="n">X_scaled</span><span class="p">)</span>
+
+    <span class="c1"># Centroid dari masing-masing klaster</span>
+    <span class="n">centroids</span> <span class="o">=</span> <span class="n">kmeans</span><span class="o">.</span><span class="n">cluster_centers_</span>
+
+    <span class="c1"># Plotting data dan centroid</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+    <span class="c1"># Scatter plot untuk 2 fitur pertama (sepal length &amp; sepal width)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_scaled</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X_scaled</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Set1&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+    <span class="c1"># Plot centroid dengan warna berbeda</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">centroids</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">centroids</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;X&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Centroids&#39;</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;K-Means Clustering with </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> Clusters&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="n">feature_names</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">feature_names</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># 4. Melakukan clustering dengan K=2, K=3, dan K=4 dan plot hasilnya</span>
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]:</span>
+    <span class="n">perform_kmeans_plot</span><span class="p">(</span><span class="n">X_scaled</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/7267e97b438749f1d47afff38cf37b02f22240c2c12db3f457ffc44830031101.png" src="_images/7267e97b438749f1d47afff38cf37b02f22240c2c12db3f457ffc44830031101.png" />
+<img alt="_images/195fac63556cdb819f7604082ad5e7ecd0290dc3b35ec532e48897d3e464e95f.png" src="_images/195fac63556cdb819f7604082ad5e7ecd0290dc3b35ec532e48897d3e464e95f.png" />
+<img alt="_images/093cf4d64f875665a2eec1222ae3cf7a8d24676e296ec125cc9a8a649fc453d8.png" src="_images/093cf4d64f875665a2eec1222ae3cf7a8d24676e296ec125cc9a8a649fc453d8.png" />
+</div>
+</div>
+</section>
+<section id="menghitung-inertia-untuk-jumlah-cluster-2-3-dan-4">
+<h2><strong>Menghitung Inertia untuk Jumlah Cluster 2,3 dan 4</strong><a class="headerlink" href="#menghitung-inertia-untuk-jumlah-cluster-2-3-dan-4" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. Siapkan fitur (X) dan label (y)</span>
+<span class="n">feature_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;sepal length&#39;</span><span class="p">,</span> <span class="s1">&#39;sepal width&#39;</span><span class="p">,</span> <span class="s1">&#39;petal length&#39;</span><span class="p">,</span> <span class="s1">&#39;petal width&#39;</span><span class="p">]</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">df_merged</span><span class="p">[</span><span class="n">feature_names</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df_merged</span><span class="p">[</span><span class="s1">&#39;class&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;category&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">codes</span><span class="o">.</span><span class="n">values</span>  <span class="c1"># label dikodekan ke angka</span>
+
+<span class="c1"># 2. Standarisasi data</span>
+<span class="n">scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+<span class="n">X_scaled</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="c1"># 3. Fungsi untuk menghitung inertia secara manual</span>
+<span class="k">def</span> <span class="nf">calculate_inertia_step_by_step</span><span class="p">(</span><span class="n">X_scaled</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">centroids</span><span class="p">):</span>
+    <span class="n">inertia</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Langkah-langkah perhitungan Inertia:&quot;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X_scaled</span><span class="p">)):</span>
+        <span class="n">cluster</span> <span class="o">=</span> <span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">distance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">X_scaled</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">centroids</span><span class="p">[</span><span class="n">cluster</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="n">inertia</span> <span class="o">+=</span> <span class="n">distance</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Titik data </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2"> (Fitur: </span><span class="si">{</span><span class="n">X_scaled</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2">), Klaster: </span><span class="si">{</span><span class="n">cluster</span><span class="si">}</span><span class="s2">, &quot;</span>
+              <span class="sa">f</span><span class="s2">&quot;Centroid: </span><span class="si">{</span><span class="n">centroids</span><span class="p">[</span><span class="n">cluster</span><span class="p">]</span><span class="si">}</span><span class="s2">, Jarak kuadrat: </span><span class="si">{</span><span class="n">distance</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, &quot;</span>
+              <span class="sa">f</span><span class="s2">&quot;Inertia sementara: </span><span class="si">{</span><span class="n">inertia</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">inertia</span>
+
+<span class="c1"># 4. Fungsi untuk menjalankan KMeans dan menghitung inertia manual</span>
+<span class="k">def</span> <span class="nf">perform_kmeans</span><span class="p">(</span><span class="n">X_scaled</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+    <span class="n">kmeans</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="n">kmeans</span><span class="o">.</span><span class="n">fit_predict</span><span class="p">(</span><span class="n">X_scaled</span><span class="p">)</span>
+    <span class="n">centroids</span> <span class="o">=</span> <span class="n">kmeans</span><span class="o">.</span><span class="n">cluster_centers_</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Hasil K-Means dengan </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> Klaster ===&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Centroids (fitur hasil standarisasi):</span><span class="se">\n</span><span class="si">{</span><span class="n">centroids</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Hitung inertia manual</span>
+    <span class="n">manual_inertia</span> <span class="o">=</span> <span class="n">calculate_inertia_step_by_step</span><span class="p">(</span><span class="n">X_scaled</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">centroids</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Total Inertia Manual: </span><span class="si">{</span><span class="n">manual_inertia</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Bandingkan dengan inertia dari sklearn</span>
+    <span class="n">sklearn_inertia</span> <span class="o">=</span> <span class="n">kmeans</span><span class="o">.</span><span class="n">inertia_</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Inertia dari sklearn: </span><span class="si">{</span><span class="n">sklearn_inertia</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="o">*</span><span class="mi">50</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">labels</span><span class="p">,</span> <span class="n">centroids</span><span class="p">,</span> <span class="n">manual_inertia</span>
+
+<span class="c1"># 5. Jalankan untuk k=2, 3, dan 4</span>
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]:</span>
+    <span class="n">perform_kmeans</span><span class="p">(</span><span class="n">X_scaled</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>=== Hasil K-Means dengan 2 Klaster ===
+Centroids (fitur hasil standarisasi):
+[[-0.28297728 -0.19494245 -0.31250581 -0.30912184]
+ [ 2.5467955   1.75448205  2.8125523   2.78209656]]
+Langkah-langkah perhitungan Inertia:
+Titik data 1 (Fitur: [-0.29435637 -0.19132673 -0.3540672  -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 0.002
+Titik data 2 (Fitur: [3.08678504 0.7504522  1.63075697 1.30730263]), Klaster: 1, Centroid: [2.5467955  1.75448205 2.8125523  2.78209656], Jarak kuadrat: 4.871, Inertia sementara: 4.873
+Titik data 3 (Fitur: [1.50405708 0.91877013 3.47251592 2.8732206 ]), Klaster: 1, Centroid: [2.5467955  1.75448205 2.8125523  2.78209656], Jarak kuadrat: 2.230, Inertia sementara: 7.103
+Titik data 4 (Fitur: [ 1.72129425 11.18616424  3.07785329  5.28845   ]), Klaster: 1, Centroid: [2.5467955  1.75448205 2.8125523  2.78209656], Jarak kuadrat: 95.990, Inertia sementara: 103.093
+Titik data 5 (Fitur: [1.53509096 1.71226898 3.45607165 2.72724519]), Klaster: 1, Centroid: [2.5467955  1.75448205 2.8125523  2.78209656], Jarak kuadrat: 1.442, Inertia sementara: 104.536
+Titik data 6 (Fitur: [7.71083341 0.76648248 2.9298548  2.60781077]), Klaster: 1, Centroid: [2.5467955  1.75448205 2.8125523  2.78209656], Jarak kuadrat: 27.688, Inertia sementara: 132.223
+Titik data 7 (Fitur: [-0.30211484 -0.19212824 -0.35242277 -0.32098664]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 132.225
+Titik data 8 (Fitur: [-0.29590806 -0.19212824 -0.35900048 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.003, Inertia sementara: 132.228
+Titik data 9 (Fitur: [-0.29590806 -0.19613581 -0.30966765 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 132.228
+Titik data 10 (Fitur: [-0.29745976 -0.19453279 -0.35077834 -0.32098664]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 132.230
+Titik data 11 (Fitur: [-0.28970129 -0.1897237  -0.35077834 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 132.232
+Titik data 12 (Fitur: [-0.29901145 -0.19212824 -0.34913391 -0.32098664]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 132.233
+Titik data 13 (Fitur: [-0.29901145 -0.1953343  -0.30473437 -0.32364074]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 132.234
+Titik data 14 (Fitur: [-0.30676992 -0.1953343  -0.25211268 -0.32364074]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.004, Inertia sementara: 132.238
+Titik data 15 (Fitur: [-0.28349451 -0.18731916 -0.35571162 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 132.241
+Titik data 16 (Fitur: [-0.2850462  -0.18411311 -0.35077834 -0.31965959]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 132.242
+Titik data 17 (Fitur: [-0.28970129 -0.18812067 -0.3540672  -0.31965959]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 132.244
+Titik data 18 (Fitur: [-0.29435637 -0.19132673 -0.35242277 -0.32098664]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 132.246
+Titik data 19 (Fitur: [-0.2850462  -0.18892219 -0.34748949 -0.32098664]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 132.247
+Titik data 20 (Fitur: [-0.29435637 -0.18892219 -0.35077834 -0.32098664]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 132.249
+Titik data 21 (Fitur: [-0.28970129 -0.19212824 -0.34748949 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 132.251
+Titik data 22 (Fitur: [-0.29435637 -0.1897237  -0.35077834 -0.31965959]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 132.252
+Titik data 23 (Fitur: [-0.30211484 -0.19052522 -0.35900048 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.003, Inertia sementara: 132.255
+Titik data 24 (Fitur: [-0.29435637 -0.19292976 -0.34748949 -0.31833254]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 132.257
+Titik data 25 (Fitur: [-0.29901145 -0.19212824 -0.34420063 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 132.258
+Titik data 26 (Fitur: [-0.29590806 -0.1953343  -0.34913391 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 132.260
+Titik data 27 (Fitur: [-0.29590806 -0.19212824 -0.34913391 -0.31965959]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 132.261
+Titik data 28 (Fitur: [-0.29280467 -0.19132673 -0.35077834 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 132.263
+Titik data 29 (Fitur: [-0.29280467 -0.19212824 -0.35242277 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 132.265
+Titik data 30 (Fitur: [-0.30056314 -0.19373127 -0.34913391 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 132.267
+Titik data 31 (Fitur: [-0.29901145 -0.19453279 -0.34913391 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 132.269
+Titik data 32 (Fitur: [-0.28970129 -0.19212824 -0.35077834 -0.31965959]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 132.270
+Titik data 33 (Fitur: [-0.29280467 -0.18651765 -0.35077834 -0.32364074]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 132.272
+Titik data 34 (Fitur: [-0.28814959 -0.18571613 -0.35242277 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 132.274
+Titik data 35 (Fitur: [-0.29745976 -0.19453279 -0.35077834 -0.32364074]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 132.276
+Titik data 36 (Fitur: [-0.29590806 -0.19373127 -0.35571162 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 132.278
+Titik data 37 (Fitur: [-0.28814959 -0.19132673 -0.3540672  -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 132.280
+Titik data 38 (Fitur: [-0.29745976 -0.19453279 -0.35077834 -0.32364074]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 132.282
+Titik data 39 (Fitur: [-0.30521823 -0.1953343  -0.3540672  -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 132.284
+Titik data 40 (Fitur: [-0.29435637 -0.19212824 -0.35077834 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 132.286
+Titik data 41 (Fitur: [-0.29590806 -0.19132673 -0.3540672  -0.32098664]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 132.288
+Titik data 42 (Fitur: [-0.30366653 -0.2009449  -0.3540672  -0.32098664]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 132.290
+Titik data 43 (Fitur: [-0.30521823 -0.19373127 -0.3540672  -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 132.293
+Titik data 44 (Fitur: [-0.29590806 -0.19132673 -0.34913391 -0.31700549]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 132.294
+Titik data 45 (Fitur: [-0.29435637 -0.18892219 -0.34420063 -0.31965959]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 132.296
+Titik data 46 (Fitur: [-0.29901145 -0.1953343  -0.35242277 -0.32098664]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 132.298
+Titik data 47 (Fitur: [-0.29435637 -0.18892219 -0.34913391 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 132.299
+Titik data 48 (Fitur: [-0.30211484 -0.19373127 -0.35242277 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 132.301
+Titik data 49 (Fitur: [-0.29125298 -0.1897237  -0.35077834 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 132.303
+Titik data 50 (Fitur: [-0.29590806 -0.19292976 -0.35242277 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 132.305
+Titik data 51 (Fitur: [2.88506481 1.39166338 1.66364552 2.74051568]), Klaster: 1, Centroid: [2.5467955  1.75448205 2.8125523  2.78209656], Jarak kuadrat: 1.568, Inertia sementara: 133.873
+Titik data 52 (Fitur: [1.48854013 2.27332876 3.11074184 2.34240095]), Klaster: 1, Centroid: [2.5467955  1.75448205 2.8125523  2.78209656], Jarak kuadrat: 1.671, Inertia sementara: 135.544
+Titik data 53 (Fitur: [1.56612484 0.93480041 4.72228093 5.16901558]), Klaster: 1, Centroid: [2.5467955  1.75448205 2.8125523  2.78209656], Jarak kuadrat: 10.978, Inertia sementara: 146.522
+Titik data 54 (Fitur: [1.51957402 0.66228566 4.91961225 1.53290098]), Klaster: 1, Centroid: [2.5467955  1.75448205 2.8125523  2.78209656], Jarak kuadrat: 8.248, Inertia sementara: 154.771
+Titik data 55 (Fitur: [2.90058175 0.67831594 1.4663142  3.81542547]), Klaster: 1, Centroid: [2.5467955  1.75448205 2.8125523  2.78209656], Jarak kuadrat: 4.163, Inertia sementara: 158.934
+Titik data 56 (Fitur: [-0.2850462  -0.19693733 -0.30144551 -0.30771615]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.934
+Titik data 57 (Fitur: [-0.27573604 -0.19292976 -0.29815666 -0.303735  ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.934
+Titik data 58 (Fitur: [-0.29745976 -0.20014338 -0.32117864 -0.3116973 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.935
+Titik data 59 (Fitur: [-0.27108096 -0.19613581 -0.29980108 -0.30771615]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.935
+Titik data 60 (Fitur: [-0.29280467 -0.19773884 -0.31131208 -0.3063891 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.935
+Titik data 61 (Fitur: [-0.29590806 -0.20334944 -0.31788979 -0.3116973 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.935
+Titik data 62 (Fitur: [-0.28194282 -0.1953343  -0.3063788  -0.30506205]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.935
+Titik data 63 (Fitur: [-0.28039112 -0.20174641 -0.30966765 -0.3116973 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.936
+Titik data 64 (Fitur: [-0.27883943 -0.19613581 -0.29815666 -0.3063891 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.936
+Titik data 65 (Fitur: [-0.2865979  -0.19613581 -0.31624536 -0.30771615]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.936
+Titik data 66 (Fitur: [-0.26952926 -0.19453279 -0.30308994 -0.3063891 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.936
+Titik data 67 (Fitur: [-0.2865979  -0.1953343  -0.30144551 -0.30506205]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.936
+Titik data 68 (Fitur: [-0.28349451 -0.19773884 -0.30802322 -0.3116973 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.936
+Titik data 69 (Fitur: [-0.27728773 -0.20174641 -0.30144551 -0.30506205]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.936
+Titik data 70 (Fitur: [-0.2865979  -0.19934187 -0.31131208 -0.31037025]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.937
+Titik data 71 (Fitur: [-0.28194282 -0.19373127 -0.29651223 -0.3010809 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.937
+Titik data 72 (Fitur: [-0.27883943 -0.19693733 -0.30966765 -0.30771615]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.937
+Titik data 73 (Fitur: [-0.27573604 -0.19934187 -0.2948678  -0.30506205]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.937
+Titik data 74 (Fitur: [-0.27883943 -0.19693733 -0.29815666 -0.3090432 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.937
+Titik data 75 (Fitur: [-0.27418434 -0.19613581 -0.30473437 -0.30771615]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.938
+Titik data 76 (Fitur: [-0.27108096 -0.1953343  -0.30308994 -0.3063891 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.938
+Titik data 77 (Fitur: [-0.26797757 -0.19693733 -0.29651223 -0.3063891 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.938
+Titik data 78 (Fitur: [-0.26952926 -0.1953343  -0.29322337 -0.30240795]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 158.939
+Titik data 79 (Fitur: [-0.28039112 -0.19613581 -0.30144551 -0.30506205]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.939
+Titik data 80 (Fitur: [-0.2850462  -0.19854036 -0.31788979 -0.3116973 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.939
+Titik data 81 (Fitur: [-0.28814959 -0.20014338 -0.31295651 -0.31037025]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.939
+Titik data 82 (Fitur: [-0.28814959 -0.20014338 -0.31460093 -0.3116973 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.939
+Titik data 83 (Fitur: [-0.28349451 -0.19773884 -0.31131208 -0.3090432 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.939
+Titik data 84 (Fitur: [-0.28039112 -0.19773884 -0.29157895 -0.303735  ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.940
+Titik data 85 (Fitur: [-0.28970129 -0.1953343  -0.30144551 -0.30506205]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.940
+Titik data 86 (Fitur: [-0.28039112 -0.19212824 -0.30144551 -0.303735  ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.940
+Titik data 87 (Fitur: [-0.26952926 -0.19453279 -0.29815666 -0.30506205]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.941
+Titik data 88 (Fitur: [-0.27573604 -0.2009449  -0.30308994 -0.30771615]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.941
+Titik data 89 (Fitur: [-0.2865979  -0.1953343  -0.30802322 -0.30771615]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.941
+Titik data 90 (Fitur: [-0.28814959 -0.19934187 -0.30966765 -0.30771615]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.941
+Titik data 91 (Fitur: [-0.28814959 -0.19854036 -0.30308994 -0.3090432 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.941
+Titik data 92 (Fitur: [-0.27883943 -0.1953343  -0.29980108 -0.3063891 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.941
+Titik data 93 (Fitur: [-0.28349451 -0.19854036 -0.30966765 -0.3090432 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.941
+Titik data 94 (Fitur: [-0.29590806 -0.2009449  -0.32117864 -0.3116973 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.941
+Titik data 95 (Fitur: [-0.2865979  -0.19773884 -0.3063788  -0.30771615]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.941
+Titik data 96 (Fitur: [-0.2850462 -0.1953343 -0.3063788 -0.3090432]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.942
+Titik data 97 (Fitur: [-0.2850462  -0.19613581 -0.3063788  -0.30771615]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.942
+Titik data 98 (Fitur: [-0.27728773 -0.19613581 -0.30473437 -0.30771615]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.942
+Titik data 99 (Fitur: [-0.29435637 -0.19934187 -0.32611193 -0.31037025]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.942
+Titik data 100 (Fitur: [-0.29590806 -0.19854036 -0.30802322 -0.30771615]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 158.942
+Titik data 101 (Fitur: [1.51957402 0.67831594 1.61431269 1.45327804]), Klaster: 1, Centroid: [2.5467955  1.75448205 2.8125523  2.78209656], Jarak kuadrat: 5.415, Inertia sementara: 164.357
+Titik data 102 (Fitur: [3.05575116 0.66228566 1.82808828 2.74051568]), Klaster: 1, Centroid: [2.5467955  1.75448205 2.8125523  2.78209656], Jarak kuadrat: 2.423, Inertia sementara: 166.780
+Titik data 103 (Fitur: [1.37992155 0.67831594 1.64720124 2.78032716]), Klaster: 1, Centroid: [2.5467955  1.75448205 2.8125523  2.78209656], Jarak kuadrat: 3.878, Inertia sementara: 170.658
+Titik data 104 (Fitur: [1.53509096 1.55196618 3.07785329 3.03246649]), Klaster: 1, Centroid: [2.5467955  1.75448205 2.8125523  2.78209656], Jarak kuadrat: 1.198, Inertia sementara: 171.855
+Titik data 105 (Fitur: [4.79364853 1.47181478 3.57118158 1.32057312]), Klaster: 1, Centroid: [2.5467955  1.75448205 2.8125523  2.78209656], Jarak kuadrat: 7.840, Inertia sementara: 179.695
+Titik data 106 (Fitur: [-0.25556402 -0.1953343  -0.26691253 -0.29709976]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.003, Inertia sementara: 179.698
+Titik data 107 (Fitur: [-0.29745976 -0.19934187 -0.30144551 -0.30240795]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 179.698
+Titik data 108 (Fitur: [-0.2602191  -0.19613581 -0.27184581 -0.3010809 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 179.701
+Titik data 109 (Fitur: [-0.26952926 -0.19934187 -0.28006795 -0.3010809 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 179.702
+Titik data 110 (Fitur: [-0.26177079 -0.19052522 -0.27513467 -0.29179156]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 179.704
+Titik data 111 (Fitur: [-0.27263265 -0.19373127 -0.29157895 -0.29842681]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 179.705
+Titik data 112 (Fitur: [-0.27418434 -0.19773884 -0.28829009 -0.29975386]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 179.706
+Titik data 113 (Fitur: [-0.26797757 -0.1953343  -0.28500124 -0.29709976]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 179.707
+Titik data 114 (Fitur: [-0.2850462  -0.19934187 -0.29322337 -0.29842681]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 179.707
+Titik data 115 (Fitur: [-0.28349451 -0.19693733 -0.29157895 -0.29311861]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 179.708
+Titik data 116 (Fitur: [-0.27418434 -0.19373127 -0.28829009 -0.29444566]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 179.709
+Titik data 117 (Fitur: [-0.27263265 -0.1953343  -0.28500124 -0.3010809 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 179.710
+Titik data 118 (Fitur: [-0.25401232 -0.18892219 -0.2652681  -0.29577271]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.003, Inertia sementara: 179.713
+Titik data 119 (Fitur: [-0.25401232 -0.19854036 -0.26197925 -0.29444566]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.004, Inertia sementara: 179.717
+Titik data 120 (Fitur: [-0.28039112 -0.20174641 -0.29322337 -0.30506205]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 179.717
+Titik data 121 (Fitur: [-0.26642587 -0.19373127 -0.28171238 -0.29444566]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 179.719
+Titik data 122 (Fitur: [-0.2865979  -0.19693733 -0.2948678  -0.29842681]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 179.719
+Titik data 123 (Fitur: [-0.25401232 -0.19693733 -0.2652681  -0.29842681]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.003, Inertia sementara: 179.722
+Titik data 124 (Fitur: [-0.27573604 -0.19773884 -0.2948678  -0.3010809 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 179.723
+Titik data 125 (Fitur: [-0.26952926 -0.19292976 -0.28171238 -0.29709976]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 179.724
+Titik data 126 (Fitur: [-0.26177079 -0.19373127 -0.2767791  -0.3010809 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 179.726
+Titik data 127 (Fitur: [-0.27728773 -0.19693733 -0.29651223 -0.3010809 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 179.726
+Titik data 128 (Fitur: [-0.27883943 -0.1953343  -0.2948678  -0.3010809 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 179.726
+Titik data 129 (Fitur: [-0.27418434 -0.19693733 -0.28335681 -0.29709976]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 179.727
+Titik data 130 (Fitur: [-0.26177079 -0.1953343  -0.28006795 -0.303735  ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 179.729
+Titik data 131 (Fitur: [-0.2586674  -0.19693733 -0.27513467 -0.29975386]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 179.731
+Titik data 132 (Fitur: [-0.25090893 -0.18892219 -0.27020139 -0.29842681]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.003, Inertia sementara: 179.734
+Titik data 133 (Fitur: [-0.27418434 -0.19693733 -0.28335681 -0.29577271]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 179.735
+Titik data 134 (Fitur: [-0.27573604 -0.19693733 -0.29157895 -0.30506205]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 179.736
+Titik data 135 (Fitur: [-0.27883943 -0.19854036 -0.28335681 -0.3063891 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 179.737
+Titik data 136 (Fitur: [-0.25401232 -0.1953343  -0.27513467 -0.29444566]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 179.739
+Titik data 137 (Fitur: [-0.27573604 -0.19212824 -0.28335681 -0.29311861]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 179.740
+Titik data 138 (Fitur: [-0.27418434 -0.19453279 -0.28500124 -0.3010809 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 179.741
+Titik data 139 (Fitur: [-0.28039112 -0.1953343  -0.29651223 -0.3010809 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 179.741
+Titik data 140 (Fitur: [-0.26642587 -0.19453279 -0.28664566 -0.29709976]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 179.743
+Titik data 141 (Fitur: [-0.26952926 -0.19453279 -0.28335681 -0.29311861]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 179.744
+Titik data 142 (Fitur: [-0.26642587 -0.19453279 -0.29157895 -0.29444566]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 179.745
+Titik data 143 (Fitur: [-0.28349451 -0.19773884 -0.29157895 -0.29975386]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 179.745
+Titik data 144 (Fitur: [-0.26797757 -0.19373127 -0.27842353 -0.29444566]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 179.747
+Titik data 145 (Fitur: [-0.26952926 -0.19292976 -0.28171238 -0.29179156]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 179.748
+Titik data 146 (Fitur: [-0.26952926 -0.1953343  -0.28993452 -0.29444566]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 179.749
+Titik data 147 (Fitur: [-0.27573604 -0.19934187 -0.29322337 -0.29975386]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 179.750
+Titik data 148 (Fitur: [-0.27263265 -0.1953343  -0.28993452 -0.29842681]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 179.750
+Titik data 149 (Fitur: [-0.27728773 -0.19212824 -0.28664566 -0.29444566]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 179.751
+Titik data 150 (Fitur: [-0.28194282 -0.1953343  -0.29157895 -0.3010809 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 179.752
+
+Total Inertia Manual: 179.752
+Inertia dari sklearn: 179.752
+==================================================
+
+=== Hasil K-Means dengan 3 Klaster ===
+Centroids (fitur hasil standarisasi):
+[[-0.28297728 -0.19494245 -0.31250581 -0.30912184]
+ [ 2.60575987  1.08079046  2.79360223  2.60307131]
+ [ 1.72129425 11.18616424  3.07785329  5.28845   ]]
+Langkah-langkah perhitungan Inertia:
+Titik data 1 (Fitur: [-0.29435637 -0.19132673 -0.3540672  -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 0.002
+Titik data 2 (Fitur: [3.08678504 0.7504522  1.63075697 1.30730263]), Klaster: 1, Centroid: [2.60575987 1.08079046 2.79360223 2.60307131], Jarak kuadrat: 3.372, Inertia sementara: 3.374
+Titik data 3 (Fitur: [1.50405708 0.91877013 3.47251592 2.8732206 ]), Klaster: 1, Centroid: [2.60575987 1.08079046 2.79360223 2.60307131], Jarak kuadrat: 1.774, Inertia sementara: 5.148
+Titik data 4 (Fitur: [ 1.72129425 11.18616424  3.07785329  5.28845   ]), Klaster: 2, Centroid: [ 1.72129425 11.18616424  3.07785329  5.28845   ], Jarak kuadrat: 0.000, Inertia sementara: 5.148
+Titik data 5 (Fitur: [1.53509096 1.71226898 3.45607165 2.72724519]), Klaster: 1, Centroid: [2.60575987 1.08079046 2.79360223 2.60307131], Jarak kuadrat: 1.999, Inertia sementara: 7.147
+Titik data 6 (Fitur: [7.71083341 0.76648248 2.9298548  2.60781077]), Klaster: 1, Centroid: [2.60575987 1.08079046 2.79360223 2.60307131], Jarak kuadrat: 26.179, Inertia sementara: 33.326
+Titik data 7 (Fitur: [-0.30211484 -0.19212824 -0.35242277 -0.32098664]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 33.328
+Titik data 8 (Fitur: [-0.29590806 -0.19212824 -0.35900048 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.003, Inertia sementara: 33.331
+Titik data 9 (Fitur: [-0.29590806 -0.19613581 -0.30966765 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 33.331
+Titik data 10 (Fitur: [-0.29745976 -0.19453279 -0.35077834 -0.32098664]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 33.333
+Titik data 11 (Fitur: [-0.28970129 -0.1897237  -0.35077834 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 33.335
+Titik data 12 (Fitur: [-0.29901145 -0.19212824 -0.34913391 -0.32098664]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 33.336
+Titik data 13 (Fitur: [-0.29901145 -0.1953343  -0.30473437 -0.32364074]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 33.337
+Titik data 14 (Fitur: [-0.30676992 -0.1953343  -0.25211268 -0.32364074]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.004, Inertia sementara: 33.341
+Titik data 15 (Fitur: [-0.28349451 -0.18731916 -0.35571162 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 33.344
+Titik data 16 (Fitur: [-0.2850462  -0.18411311 -0.35077834 -0.31965959]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 33.345
+Titik data 17 (Fitur: [-0.28970129 -0.18812067 -0.3540672  -0.31965959]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 33.347
+Titik data 18 (Fitur: [-0.29435637 -0.19132673 -0.35242277 -0.32098664]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 33.349
+Titik data 19 (Fitur: [-0.2850462  -0.18892219 -0.34748949 -0.32098664]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 33.350
+Titik data 20 (Fitur: [-0.29435637 -0.18892219 -0.35077834 -0.32098664]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 33.352
+Titik data 21 (Fitur: [-0.28970129 -0.19212824 -0.34748949 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 33.354
+Titik data 22 (Fitur: [-0.29435637 -0.1897237  -0.35077834 -0.31965959]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 33.355
+Titik data 23 (Fitur: [-0.30211484 -0.19052522 -0.35900048 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.003, Inertia sementara: 33.358
+Titik data 24 (Fitur: [-0.29435637 -0.19292976 -0.34748949 -0.31833254]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 33.360
+Titik data 25 (Fitur: [-0.29901145 -0.19212824 -0.34420063 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 33.361
+Titik data 26 (Fitur: [-0.29590806 -0.1953343  -0.34913391 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 33.363
+Titik data 27 (Fitur: [-0.29590806 -0.19212824 -0.34913391 -0.31965959]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 33.364
+Titik data 28 (Fitur: [-0.29280467 -0.19132673 -0.35077834 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 33.366
+Titik data 29 (Fitur: [-0.29280467 -0.19212824 -0.35242277 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 33.368
+Titik data 30 (Fitur: [-0.30056314 -0.19373127 -0.34913391 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 33.370
+Titik data 31 (Fitur: [-0.29901145 -0.19453279 -0.34913391 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 33.372
+Titik data 32 (Fitur: [-0.28970129 -0.19212824 -0.35077834 -0.31965959]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 33.373
+Titik data 33 (Fitur: [-0.29280467 -0.18651765 -0.35077834 -0.32364074]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 33.375
+Titik data 34 (Fitur: [-0.28814959 -0.18571613 -0.35242277 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 33.377
+Titik data 35 (Fitur: [-0.29745976 -0.19453279 -0.35077834 -0.32364074]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 33.379
+Titik data 36 (Fitur: [-0.29590806 -0.19373127 -0.35571162 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 33.381
+Titik data 37 (Fitur: [-0.28814959 -0.19132673 -0.3540672  -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 33.383
+Titik data 38 (Fitur: [-0.29745976 -0.19453279 -0.35077834 -0.32364074]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 33.385
+Titik data 39 (Fitur: [-0.30521823 -0.1953343  -0.3540672  -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 33.387
+Titik data 40 (Fitur: [-0.29435637 -0.19212824 -0.35077834 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 33.389
+Titik data 41 (Fitur: [-0.29590806 -0.19132673 -0.3540672  -0.32098664]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 33.391
+Titik data 42 (Fitur: [-0.30366653 -0.2009449  -0.3540672  -0.32098664]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 33.393
+Titik data 43 (Fitur: [-0.30521823 -0.19373127 -0.3540672  -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 33.396
+Titik data 44 (Fitur: [-0.29590806 -0.19132673 -0.34913391 -0.31700549]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 33.397
+Titik data 45 (Fitur: [-0.29435637 -0.18892219 -0.34420063 -0.31965959]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 33.399
+Titik data 46 (Fitur: [-0.29901145 -0.1953343  -0.35242277 -0.32098664]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 33.401
+Titik data 47 (Fitur: [-0.29435637 -0.18892219 -0.34913391 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 33.402
+Titik data 48 (Fitur: [-0.30211484 -0.19373127 -0.35242277 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 33.404
+Titik data 49 (Fitur: [-0.29125298 -0.1897237  -0.35077834 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 33.406
+Titik data 50 (Fitur: [-0.29590806 -0.19292976 -0.35242277 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 33.408
+Titik data 51 (Fitur: [2.88506481 1.39166338 1.66364552 2.74051568]), Klaster: 1, Centroid: [2.60575987 1.08079046 2.79360223 2.60307131], Jarak kuadrat: 1.470, Inertia sementara: 34.878
+Titik data 52 (Fitur: [1.48854013 2.27332876 3.11074184 2.34240095]), Klaster: 1, Centroid: [2.60575987 1.08079046 2.79360223 2.60307131], Jarak kuadrat: 2.839, Inertia sementara: 37.717
+Titik data 53 (Fitur: [1.56612484 0.93480041 4.72228093 5.16901558]), Klaster: 1, Centroid: [2.60575987 1.08079046 2.79360223 2.60307131], Jarak kuadrat: 11.406, Inertia sementara: 49.123
+Titik data 54 (Fitur: [1.51957402 0.66228566 4.91961225 1.53290098]), Klaster: 1, Centroid: [2.60575987 1.08079046 2.79360223 2.60307131], Jarak kuadrat: 7.020, Inertia sementara: 56.143
+Titik data 55 (Fitur: [2.90058175 0.67831594 1.4663142  3.81542547]), Klaster: 1, Centroid: [2.60575987 1.08079046 2.79360223 2.60307131], Jarak kuadrat: 3.480, Inertia sementara: 59.624
+Titik data 56 (Fitur: [-0.2850462  -0.19693733 -0.30144551 -0.30771615]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.624
+Titik data 57 (Fitur: [-0.27573604 -0.19292976 -0.29815666 -0.303735  ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.624
+Titik data 58 (Fitur: [-0.29745976 -0.20014338 -0.32117864 -0.3116973 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.625
+Titik data 59 (Fitur: [-0.27108096 -0.19613581 -0.29980108 -0.30771615]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.625
+Titik data 60 (Fitur: [-0.29280467 -0.19773884 -0.31131208 -0.3063891 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.625
+Titik data 61 (Fitur: [-0.29590806 -0.20334944 -0.31788979 -0.3116973 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.625
+Titik data 62 (Fitur: [-0.28194282 -0.1953343  -0.3063788  -0.30506205]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.625
+Titik data 63 (Fitur: [-0.28039112 -0.20174641 -0.30966765 -0.3116973 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.625
+Titik data 64 (Fitur: [-0.27883943 -0.19613581 -0.29815666 -0.3063891 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.626
+Titik data 65 (Fitur: [-0.2865979  -0.19613581 -0.31624536 -0.30771615]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.626
+Titik data 66 (Fitur: [-0.26952926 -0.19453279 -0.30308994 -0.3063891 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.626
+Titik data 67 (Fitur: [-0.2865979  -0.1953343  -0.30144551 -0.30506205]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.626
+Titik data 68 (Fitur: [-0.28349451 -0.19773884 -0.30802322 -0.3116973 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.626
+Titik data 69 (Fitur: [-0.27728773 -0.20174641 -0.30144551 -0.30506205]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.626
+Titik data 70 (Fitur: [-0.2865979  -0.19934187 -0.31131208 -0.31037025]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.626
+Titik data 71 (Fitur: [-0.28194282 -0.19373127 -0.29651223 -0.3010809 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.627
+Titik data 72 (Fitur: [-0.27883943 -0.19693733 -0.30966765 -0.30771615]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.627
+Titik data 73 (Fitur: [-0.27573604 -0.19934187 -0.2948678  -0.30506205]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.627
+Titik data 74 (Fitur: [-0.27883943 -0.19693733 -0.29815666 -0.3090432 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.627
+Titik data 75 (Fitur: [-0.27418434 -0.19613581 -0.30473437 -0.30771615]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.628
+Titik data 76 (Fitur: [-0.27108096 -0.1953343  -0.30308994 -0.3063891 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.628
+Titik data 77 (Fitur: [-0.26797757 -0.19693733 -0.29651223 -0.3063891 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.628
+Titik data 78 (Fitur: [-0.26952926 -0.1953343  -0.29322337 -0.30240795]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 59.629
+Titik data 79 (Fitur: [-0.28039112 -0.19613581 -0.30144551 -0.30506205]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.629
+Titik data 80 (Fitur: [-0.2850462  -0.19854036 -0.31788979 -0.3116973 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.629
+Titik data 81 (Fitur: [-0.28814959 -0.20014338 -0.31295651 -0.31037025]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.629
+Titik data 82 (Fitur: [-0.28814959 -0.20014338 -0.31460093 -0.3116973 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.629
+Titik data 83 (Fitur: [-0.28349451 -0.19773884 -0.31131208 -0.3090432 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.629
+Titik data 84 (Fitur: [-0.28039112 -0.19773884 -0.29157895 -0.303735  ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.630
+Titik data 85 (Fitur: [-0.28970129 -0.1953343  -0.30144551 -0.30506205]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.630
+Titik data 86 (Fitur: [-0.28039112 -0.19212824 -0.30144551 -0.303735  ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.630
+Titik data 87 (Fitur: [-0.26952926 -0.19453279 -0.29815666 -0.30506205]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.630
+Titik data 88 (Fitur: [-0.27573604 -0.2009449  -0.30308994 -0.30771615]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.631
+Titik data 89 (Fitur: [-0.2865979  -0.1953343  -0.30802322 -0.30771615]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.631
+Titik data 90 (Fitur: [-0.28814959 -0.19934187 -0.30966765 -0.30771615]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.631
+Titik data 91 (Fitur: [-0.28814959 -0.19854036 -0.30308994 -0.3090432 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.631
+Titik data 92 (Fitur: [-0.27883943 -0.1953343  -0.29980108 -0.3063891 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.631
+Titik data 93 (Fitur: [-0.28349451 -0.19854036 -0.30966765 -0.3090432 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.631
+Titik data 94 (Fitur: [-0.29590806 -0.2009449  -0.32117864 -0.3116973 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.631
+Titik data 95 (Fitur: [-0.2865979  -0.19773884 -0.3063788  -0.30771615]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.631
+Titik data 96 (Fitur: [-0.2850462 -0.1953343 -0.3063788 -0.3090432]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.631
+Titik data 97 (Fitur: [-0.2850462  -0.19613581 -0.3063788  -0.30771615]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.631
+Titik data 98 (Fitur: [-0.27728773 -0.19613581 -0.30473437 -0.30771615]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.632
+Titik data 99 (Fitur: [-0.29435637 -0.19934187 -0.32611193 -0.31037025]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.632
+Titik data 100 (Fitur: [-0.29590806 -0.19854036 -0.30802322 -0.30771615]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 59.632
+Titik data 101 (Fitur: [1.51957402 0.67831594 1.61431269 1.45327804]), Klaster: 1, Centroid: [2.60575987 1.08079046 2.79360223 2.60307131], Jarak kuadrat: 4.055, Inertia sementara: 63.687
+Titik data 102 (Fitur: [3.05575116 0.66228566 1.82808828 2.74051568]), Klaster: 1, Centroid: [2.60575987 1.08079046 2.79360223 2.60307131], Jarak kuadrat: 1.329, Inertia sementara: 65.015
+Titik data 103 (Fitur: [1.37992155 0.67831594 1.64720124 2.78032716]), Klaster: 1, Centroid: [2.60575987 1.08079046 2.79360223 2.60307131], Jarak kuadrat: 3.010, Inertia sementara: 68.026
+Titik data 104 (Fitur: [1.53509096 1.55196618 3.07785329 3.03246649]), Klaster: 1, Centroid: [2.60575987 1.08079046 2.79360223 2.60307131], Jarak kuadrat: 1.634, Inertia sementara: 69.659
+Titik data 105 (Fitur: [4.79364853 1.47181478 3.57118158 1.32057312]), Klaster: 1, Centroid: [2.60575987 1.08079046 2.79360223 2.60307131], Jarak kuadrat: 7.189, Inertia sementara: 76.848
+Titik data 106 (Fitur: [-0.25556402 -0.1953343  -0.26691253 -0.29709976]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.003, Inertia sementara: 76.851
+Titik data 107 (Fitur: [-0.29745976 -0.19934187 -0.30144551 -0.30240795]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 76.852
+Titik data 108 (Fitur: [-0.2602191  -0.19613581 -0.27184581 -0.3010809 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 76.854
+Titik data 109 (Fitur: [-0.26952926 -0.19934187 -0.28006795 -0.3010809 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 76.855
+Titik data 110 (Fitur: [-0.26177079 -0.19052522 -0.27513467 -0.29179156]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 76.857
+Titik data 111 (Fitur: [-0.27263265 -0.19373127 -0.29157895 -0.29842681]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 76.858
+Titik data 112 (Fitur: [-0.27418434 -0.19773884 -0.28829009 -0.29975386]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 76.859
+Titik data 113 (Fitur: [-0.26797757 -0.1953343  -0.28500124 -0.29709976]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 76.860
+Titik data 114 (Fitur: [-0.2850462  -0.19934187 -0.29322337 -0.29842681]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 76.861
+Titik data 115 (Fitur: [-0.28349451 -0.19693733 -0.29157895 -0.29311861]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 76.861
+Titik data 116 (Fitur: [-0.27418434 -0.19373127 -0.28829009 -0.29444566]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 76.862
+Titik data 117 (Fitur: [-0.27263265 -0.1953343  -0.28500124 -0.3010809 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 76.863
+Titik data 118 (Fitur: [-0.25401232 -0.18892219 -0.2652681  -0.29577271]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.003, Inertia sementara: 76.866
+Titik data 119 (Fitur: [-0.25401232 -0.19854036 -0.26197925 -0.29444566]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.004, Inertia sementara: 76.870
+Titik data 120 (Fitur: [-0.28039112 -0.20174641 -0.29322337 -0.30506205]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 76.870
+Titik data 121 (Fitur: [-0.26642587 -0.19373127 -0.28171238 -0.29444566]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 76.872
+Titik data 122 (Fitur: [-0.2865979  -0.19693733 -0.2948678  -0.29842681]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 76.872
+Titik data 123 (Fitur: [-0.25401232 -0.19693733 -0.2652681  -0.29842681]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.003, Inertia sementara: 76.875
+Titik data 124 (Fitur: [-0.27573604 -0.19773884 -0.2948678  -0.3010809 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 76.876
+Titik data 125 (Fitur: [-0.26952926 -0.19292976 -0.28171238 -0.29709976]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 76.877
+Titik data 126 (Fitur: [-0.26177079 -0.19373127 -0.2767791  -0.3010809 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 76.879
+Titik data 127 (Fitur: [-0.27728773 -0.19693733 -0.29651223 -0.3010809 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 76.879
+Titik data 128 (Fitur: [-0.27883943 -0.1953343  -0.2948678  -0.3010809 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 76.880
+Titik data 129 (Fitur: [-0.27418434 -0.19693733 -0.28335681 -0.29709976]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 76.881
+Titik data 130 (Fitur: [-0.26177079 -0.1953343  -0.28006795 -0.303735  ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 76.882
+Titik data 131 (Fitur: [-0.2586674  -0.19693733 -0.27513467 -0.29975386]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 76.884
+Titik data 132 (Fitur: [-0.25090893 -0.18892219 -0.27020139 -0.29842681]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.003, Inertia sementara: 76.887
+Titik data 133 (Fitur: [-0.27418434 -0.19693733 -0.28335681 -0.29577271]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 76.888
+Titik data 134 (Fitur: [-0.27573604 -0.19693733 -0.29157895 -0.30506205]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 76.889
+Titik data 135 (Fitur: [-0.27883943 -0.19854036 -0.28335681 -0.3063891 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 76.890
+Titik data 136 (Fitur: [-0.25401232 -0.1953343  -0.27513467 -0.29444566]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 76.892
+Titik data 137 (Fitur: [-0.27573604 -0.19212824 -0.28335681 -0.29311861]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 76.893
+Titik data 138 (Fitur: [-0.27418434 -0.19453279 -0.28500124 -0.3010809 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 76.894
+Titik data 139 (Fitur: [-0.28039112 -0.1953343  -0.29651223 -0.3010809 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 76.895
+Titik data 140 (Fitur: [-0.26642587 -0.19453279 -0.28664566 -0.29709976]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 76.896
+Titik data 141 (Fitur: [-0.26952926 -0.19453279 -0.28335681 -0.29311861]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 76.897
+Titik data 142 (Fitur: [-0.26642587 -0.19453279 -0.29157895 -0.29444566]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 76.898
+Titik data 143 (Fitur: [-0.28349451 -0.19773884 -0.29157895 -0.29975386]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 76.899
+Titik data 144 (Fitur: [-0.26797757 -0.19373127 -0.27842353 -0.29444566]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 76.900
+Titik data 145 (Fitur: [-0.26952926 -0.19292976 -0.28171238 -0.29179156]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 76.902
+Titik data 146 (Fitur: [-0.26952926 -0.1953343  -0.28993452 -0.29444566]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 76.902
+Titik data 147 (Fitur: [-0.27573604 -0.19934187 -0.29322337 -0.29975386]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 76.903
+Titik data 148 (Fitur: [-0.27263265 -0.1953343  -0.28993452 -0.29842681]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 76.904
+Titik data 149 (Fitur: [-0.27728773 -0.19212824 -0.28664566 -0.29444566]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 76.905
+Titik data 150 (Fitur: [-0.28194282 -0.1953343  -0.29157895 -0.3010809 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 76.905
+
+Total Inertia Manual: 76.905
+Inertia dari sklearn: 76.905
+==================================================
+
+=== Hasil K-Means dengan 4 Klaster ===
+Centroids (fitur hasil standarisasi):
+[[-0.28297728 -0.19494245 -0.31250581 -0.30912184]
+ [ 1.50599669  1.1762565   3.25257373  2.73885687]
+ [ 1.72129425 11.18616424  3.07785329  5.28845   ]
+ [ 4.07211078  0.95350241  2.18164023  2.42202389]]
+Langkah-langkah perhitungan Inertia:
+Titik data 1 (Fitur: [-0.29435637 -0.19132673 -0.3540672  -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 0.002
+Titik data 2 (Fitur: [3.08678504 0.7504522  1.63075697 1.30730263]), Klaster: 3, Centroid: [4.07211078 0.95350241 2.18164023 2.42202389], Jarak kuadrat: 2.558, Inertia sementara: 2.560
+Titik data 3 (Fitur: [1.50405708 0.91877013 3.47251592 2.8732206 ]), Klaster: 1, Centroid: [1.50599669 1.1762565  3.25257373 2.73885687], Jarak kuadrat: 0.133, Inertia sementara: 2.693
+Titik data 4 (Fitur: [ 1.72129425 11.18616424  3.07785329  5.28845   ]), Klaster: 2, Centroid: [ 1.72129425 11.18616424  3.07785329  5.28845   ], Jarak kuadrat: 0.000, Inertia sementara: 2.693
+Titik data 5 (Fitur: [1.53509096 1.71226898 3.45607165 2.72724519]), Klaster: 1, Centroid: [1.50599669 1.1762565  3.25257373 2.73885687], Jarak kuadrat: 0.330, Inertia sementara: 3.023
+Titik data 6 (Fitur: [7.71083341 0.76648248 2.9298548  2.60781077]), Klaster: 3, Centroid: [4.07211078 0.95350241 2.18164023 2.42202389], Jarak kuadrat: 13.870, Inertia sementara: 16.892
+Titik data 7 (Fitur: [-0.30211484 -0.19212824 -0.35242277 -0.32098664]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 16.894
+Titik data 8 (Fitur: [-0.29590806 -0.19212824 -0.35900048 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.003, Inertia sementara: 16.897
+Titik data 9 (Fitur: [-0.29590806 -0.19613581 -0.30966765 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 16.897
+Titik data 10 (Fitur: [-0.29745976 -0.19453279 -0.35077834 -0.32098664]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 16.899
+Titik data 11 (Fitur: [-0.28970129 -0.1897237  -0.35077834 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 16.901
+Titik data 12 (Fitur: [-0.29901145 -0.19212824 -0.34913391 -0.32098664]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 16.903
+Titik data 13 (Fitur: [-0.29901145 -0.1953343  -0.30473437 -0.32364074]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 16.903
+Titik data 14 (Fitur: [-0.30676992 -0.1953343  -0.25211268 -0.32364074]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.004, Inertia sementara: 16.907
+Titik data 15 (Fitur: [-0.28349451 -0.18731916 -0.35571162 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 16.910
+Titik data 16 (Fitur: [-0.2850462  -0.18411311 -0.35077834 -0.31965959]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 16.911
+Titik data 17 (Fitur: [-0.28970129 -0.18812067 -0.3540672  -0.31965959]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 16.913
+Titik data 18 (Fitur: [-0.29435637 -0.19132673 -0.35242277 -0.32098664]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 16.915
+Titik data 19 (Fitur: [-0.2850462  -0.18892219 -0.34748949 -0.32098664]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 16.916
+Titik data 20 (Fitur: [-0.29435637 -0.18892219 -0.35077834 -0.32098664]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 16.918
+Titik data 21 (Fitur: [-0.28970129 -0.19212824 -0.34748949 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 16.920
+Titik data 22 (Fitur: [-0.29435637 -0.1897237  -0.35077834 -0.31965959]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 16.921
+Titik data 23 (Fitur: [-0.30211484 -0.19052522 -0.35900048 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.003, Inertia sementara: 16.924
+Titik data 24 (Fitur: [-0.29435637 -0.19292976 -0.34748949 -0.31833254]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 16.926
+Titik data 25 (Fitur: [-0.29901145 -0.19212824 -0.34420063 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 16.927
+Titik data 26 (Fitur: [-0.29590806 -0.1953343  -0.34913391 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 16.929
+Titik data 27 (Fitur: [-0.29590806 -0.19212824 -0.34913391 -0.31965959]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 16.930
+Titik data 28 (Fitur: [-0.29280467 -0.19132673 -0.35077834 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 16.932
+Titik data 29 (Fitur: [-0.29280467 -0.19212824 -0.35242277 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 16.934
+Titik data 30 (Fitur: [-0.30056314 -0.19373127 -0.34913391 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 16.936
+Titik data 31 (Fitur: [-0.29901145 -0.19453279 -0.34913391 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 16.938
+Titik data 32 (Fitur: [-0.28970129 -0.19212824 -0.35077834 -0.31965959]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 16.939
+Titik data 33 (Fitur: [-0.29280467 -0.18651765 -0.35077834 -0.32364074]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 16.941
+Titik data 34 (Fitur: [-0.28814959 -0.18571613 -0.35242277 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 16.943
+Titik data 35 (Fitur: [-0.29745976 -0.19453279 -0.35077834 -0.32364074]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 16.945
+Titik data 36 (Fitur: [-0.29590806 -0.19373127 -0.35571162 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 16.947
+Titik data 37 (Fitur: [-0.28814959 -0.19132673 -0.3540672  -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 16.949
+Titik data 38 (Fitur: [-0.29745976 -0.19453279 -0.35077834 -0.32364074]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 16.951
+Titik data 39 (Fitur: [-0.30521823 -0.1953343  -0.3540672  -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 16.953
+Titik data 40 (Fitur: [-0.29435637 -0.19212824 -0.35077834 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 16.955
+Titik data 41 (Fitur: [-0.29590806 -0.19132673 -0.3540672  -0.32098664]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 16.957
+Titik data 42 (Fitur: [-0.30366653 -0.2009449  -0.3540672  -0.32098664]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 16.959
+Titik data 43 (Fitur: [-0.30521823 -0.19373127 -0.3540672  -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 16.962
+Titik data 44 (Fitur: [-0.29590806 -0.19132673 -0.34913391 -0.31700549]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 16.963
+Titik data 45 (Fitur: [-0.29435637 -0.18892219 -0.34420063 -0.31965959]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 16.965
+Titik data 46 (Fitur: [-0.29901145 -0.1953343  -0.35242277 -0.32098664]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 16.967
+Titik data 47 (Fitur: [-0.29435637 -0.18892219 -0.34913391 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 16.968
+Titik data 48 (Fitur: [-0.30211484 -0.19373127 -0.35242277 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 16.970
+Titik data 49 (Fitur: [-0.29125298 -0.1897237  -0.35077834 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 16.972
+Titik data 50 (Fitur: [-0.29590806 -0.19292976 -0.35242277 -0.32231369]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 16.974
+Titik data 51 (Fitur: [2.88506481 1.39166338 1.66364552 2.74051568]), Klaster: 3, Centroid: [4.07211078 0.95350241 2.18164023 2.42202389], Jarak kuadrat: 1.971, Inertia sementara: 18.945
+Titik data 52 (Fitur: [1.48854013 2.27332876 3.11074184 2.34240095]), Klaster: 1, Centroid: [1.50599669 1.1762565  3.25257373 2.73885687], Jarak kuadrat: 1.381, Inertia sementara: 20.326
+Titik data 53 (Fitur: [1.56612484 0.93480041 4.72228093 5.16901558]), Klaster: 1, Centroid: [1.50599669 1.1762565  3.25257373 2.73885687], Jarak kuadrat: 8.128, Inertia sementara: 28.454
+Titik data 54 (Fitur: [1.51957402 0.66228566 4.91961225 1.53290098]), Klaster: 1, Centroid: [1.50599669 1.1762565  3.25257373 2.73885687], Jarak kuadrat: 4.498, Inertia sementara: 32.951
+Titik data 55 (Fitur: [2.90058175 0.67831594 1.4663142  3.81542547]), Klaster: 3, Centroid: [4.07211078 0.95350241 2.18164023 2.42202389], Jarak kuadrat: 3.901, Inertia sementara: 36.853
+Titik data 56 (Fitur: [-0.2850462  -0.19693733 -0.30144551 -0.30771615]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.853
+Titik data 57 (Fitur: [-0.27573604 -0.19292976 -0.29815666 -0.303735  ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.853
+Titik data 58 (Fitur: [-0.29745976 -0.20014338 -0.32117864 -0.3116973 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.854
+Titik data 59 (Fitur: [-0.27108096 -0.19613581 -0.29980108 -0.30771615]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.854
+Titik data 60 (Fitur: [-0.29280467 -0.19773884 -0.31131208 -0.3063891 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.854
+Titik data 61 (Fitur: [-0.29590806 -0.20334944 -0.31788979 -0.3116973 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.854
+Titik data 62 (Fitur: [-0.28194282 -0.1953343  -0.3063788  -0.30506205]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.854
+Titik data 63 (Fitur: [-0.28039112 -0.20174641 -0.30966765 -0.3116973 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.854
+Titik data 64 (Fitur: [-0.27883943 -0.19613581 -0.29815666 -0.3063891 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.855
+Titik data 65 (Fitur: [-0.2865979  -0.19613581 -0.31624536 -0.30771615]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.855
+Titik data 66 (Fitur: [-0.26952926 -0.19453279 -0.30308994 -0.3063891 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.855
+Titik data 67 (Fitur: [-0.2865979  -0.1953343  -0.30144551 -0.30506205]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.855
+Titik data 68 (Fitur: [-0.28349451 -0.19773884 -0.30802322 -0.3116973 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.855
+Titik data 69 (Fitur: [-0.27728773 -0.20174641 -0.30144551 -0.30506205]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.855
+Titik data 70 (Fitur: [-0.2865979  -0.19934187 -0.31131208 -0.31037025]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.855
+Titik data 71 (Fitur: [-0.28194282 -0.19373127 -0.29651223 -0.3010809 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.856
+Titik data 72 (Fitur: [-0.27883943 -0.19693733 -0.30966765 -0.30771615]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.856
+Titik data 73 (Fitur: [-0.27573604 -0.19934187 -0.2948678  -0.30506205]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.856
+Titik data 74 (Fitur: [-0.27883943 -0.19693733 -0.29815666 -0.3090432 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.856
+Titik data 75 (Fitur: [-0.27418434 -0.19613581 -0.30473437 -0.30771615]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.857
+Titik data 76 (Fitur: [-0.27108096 -0.1953343  -0.30308994 -0.3063891 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.857
+Titik data 77 (Fitur: [-0.26797757 -0.19693733 -0.29651223 -0.3063891 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.857
+Titik data 78 (Fitur: [-0.26952926 -0.1953343  -0.29322337 -0.30240795]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 36.858
+Titik data 79 (Fitur: [-0.28039112 -0.19613581 -0.30144551 -0.30506205]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.858
+Titik data 80 (Fitur: [-0.2850462  -0.19854036 -0.31788979 -0.3116973 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.858
+Titik data 81 (Fitur: [-0.28814959 -0.20014338 -0.31295651 -0.31037025]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.858
+Titik data 82 (Fitur: [-0.28814959 -0.20014338 -0.31460093 -0.3116973 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.858
+Titik data 83 (Fitur: [-0.28349451 -0.19773884 -0.31131208 -0.3090432 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.858
+Titik data 84 (Fitur: [-0.28039112 -0.19773884 -0.29157895 -0.303735  ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.859
+Titik data 85 (Fitur: [-0.28970129 -0.1953343  -0.30144551 -0.30506205]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.859
+Titik data 86 (Fitur: [-0.28039112 -0.19212824 -0.30144551 -0.303735  ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.859
+Titik data 87 (Fitur: [-0.26952926 -0.19453279 -0.29815666 -0.30506205]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.859
+Titik data 88 (Fitur: [-0.27573604 -0.2009449  -0.30308994 -0.30771615]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.860
+Titik data 89 (Fitur: [-0.2865979  -0.1953343  -0.30802322 -0.30771615]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.860
+Titik data 90 (Fitur: [-0.28814959 -0.19934187 -0.30966765 -0.30771615]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.860
+Titik data 91 (Fitur: [-0.28814959 -0.19854036 -0.30308994 -0.3090432 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.860
+Titik data 92 (Fitur: [-0.27883943 -0.1953343  -0.29980108 -0.3063891 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.860
+Titik data 93 (Fitur: [-0.28349451 -0.19854036 -0.30966765 -0.3090432 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.860
+Titik data 94 (Fitur: [-0.29590806 -0.2009449  -0.32117864 -0.3116973 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.860
+Titik data 95 (Fitur: [-0.2865979  -0.19773884 -0.3063788  -0.30771615]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.860
+Titik data 96 (Fitur: [-0.2850462 -0.1953343 -0.3063788 -0.3090432]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.860
+Titik data 97 (Fitur: [-0.2850462  -0.19613581 -0.3063788  -0.30771615]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.861
+Titik data 98 (Fitur: [-0.27728773 -0.19613581 -0.30473437 -0.30771615]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.861
+Titik data 99 (Fitur: [-0.29435637 -0.19934187 -0.32611193 -0.31037025]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.861
+Titik data 100 (Fitur: [-0.29590806 -0.19854036 -0.30802322 -0.30771615]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 36.861
+Titik data 101 (Fitur: [1.51957402 0.67831594 1.61431269 1.45327804]), Klaster: 1, Centroid: [1.50599669 1.1762565  3.25257373 2.73885687], Jarak kuadrat: 4.585, Inertia sementara: 41.446
+Titik data 102 (Fitur: [3.05575116 0.66228566 1.82808828 2.74051568]), Klaster: 3, Centroid: [4.07211078 0.95350241 2.18164023 2.42202389], Jarak kuadrat: 1.344, Inertia sementara: 42.790
+Titik data 103 (Fitur: [1.37992155 0.67831594 1.64720124 2.78032716]), Klaster: 1, Centroid: [1.50599669 1.1762565  3.25257373 2.73885687], Jarak kuadrat: 2.843, Inertia sementara: 45.633
+Titik data 104 (Fitur: [1.53509096 1.55196618 3.07785329 3.03246649]), Klaster: 1, Centroid: [1.50599669 1.1762565  3.25257373 2.73885687], Jarak kuadrat: 0.259, Inertia sementara: 45.892
+Titik data 105 (Fitur: [4.79364853 1.47181478 3.57118158 1.32057312]), Klaster: 3, Centroid: [4.07211078 0.95350241 2.18164023 2.42202389], Jarak kuadrat: 3.933, Inertia sementara: 49.825
+Titik data 106 (Fitur: [-0.25556402 -0.1953343  -0.26691253 -0.29709976]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.003, Inertia sementara: 49.828
+Titik data 107 (Fitur: [-0.29745976 -0.19934187 -0.30144551 -0.30240795]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 49.828
+Titik data 108 (Fitur: [-0.2602191  -0.19613581 -0.27184581 -0.3010809 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 49.831
+Titik data 109 (Fitur: [-0.26952926 -0.19934187 -0.28006795 -0.3010809 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 49.832
+Titik data 110 (Fitur: [-0.26177079 -0.19052522 -0.27513467 -0.29179156]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 49.834
+Titik data 111 (Fitur: [-0.27263265 -0.19373127 -0.29157895 -0.29842681]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 49.835
+Titik data 112 (Fitur: [-0.27418434 -0.19773884 -0.28829009 -0.29975386]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 49.835
+Titik data 113 (Fitur: [-0.26797757 -0.1953343  -0.28500124 -0.29709976]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 49.837
+Titik data 114 (Fitur: [-0.2850462  -0.19934187 -0.29322337 -0.29842681]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 49.837
+Titik data 115 (Fitur: [-0.28349451 -0.19693733 -0.29157895 -0.29311861]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 49.838
+Titik data 116 (Fitur: [-0.27418434 -0.19373127 -0.28829009 -0.29444566]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 49.839
+Titik data 117 (Fitur: [-0.27263265 -0.1953343  -0.28500124 -0.3010809 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 49.840
+Titik data 118 (Fitur: [-0.25401232 -0.18892219 -0.2652681  -0.29577271]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.003, Inertia sementara: 49.843
+Titik data 119 (Fitur: [-0.25401232 -0.19854036 -0.26197925 -0.29444566]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.004, Inertia sementara: 49.846
+Titik data 120 (Fitur: [-0.28039112 -0.20174641 -0.29322337 -0.30506205]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 49.847
+Titik data 121 (Fitur: [-0.26642587 -0.19373127 -0.28171238 -0.29444566]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 49.848
+Titik data 122 (Fitur: [-0.2865979  -0.19693733 -0.2948678  -0.29842681]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 49.849
+Titik data 123 (Fitur: [-0.25401232 -0.19693733 -0.2652681  -0.29842681]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.003, Inertia sementara: 49.852
+Titik data 124 (Fitur: [-0.27573604 -0.19773884 -0.2948678  -0.3010809 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 49.852
+Titik data 125 (Fitur: [-0.26952926 -0.19292976 -0.28171238 -0.29709976]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 49.854
+Titik data 126 (Fitur: [-0.26177079 -0.19373127 -0.2767791  -0.3010809 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 49.855
+Titik data 127 (Fitur: [-0.27728773 -0.19693733 -0.29651223 -0.3010809 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 49.856
+Titik data 128 (Fitur: [-0.27883943 -0.1953343  -0.2948678  -0.3010809 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 49.856
+Titik data 129 (Fitur: [-0.27418434 -0.19693733 -0.28335681 -0.29709976]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 49.857
+Titik data 130 (Fitur: [-0.26177079 -0.1953343  -0.28006795 -0.303735  ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 49.859
+Titik data 131 (Fitur: [-0.2586674  -0.19693733 -0.27513467 -0.29975386]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 49.861
+Titik data 132 (Fitur: [-0.25090893 -0.18892219 -0.27020139 -0.29842681]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.003, Inertia sementara: 49.864
+Titik data 133 (Fitur: [-0.27418434 -0.19693733 -0.28335681 -0.29577271]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 49.865
+Titik data 134 (Fitur: [-0.27573604 -0.19693733 -0.29157895 -0.30506205]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 49.866
+Titik data 135 (Fitur: [-0.27883943 -0.19854036 -0.28335681 -0.3063891 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 49.866
+Titik data 136 (Fitur: [-0.25401232 -0.1953343  -0.27513467 -0.29444566]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 49.869
+Titik data 137 (Fitur: [-0.27573604 -0.19212824 -0.28335681 -0.29311861]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 49.870
+Titik data 138 (Fitur: [-0.27418434 -0.19453279 -0.28500124 -0.3010809 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 49.871
+Titik data 139 (Fitur: [-0.28039112 -0.1953343  -0.29651223 -0.3010809 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.000, Inertia sementara: 49.871
+Titik data 140 (Fitur: [-0.26642587 -0.19453279 -0.28664566 -0.29709976]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 49.872
+Titik data 141 (Fitur: [-0.26952926 -0.19453279 -0.28335681 -0.29311861]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 49.874
+Titik data 142 (Fitur: [-0.26642587 -0.19453279 -0.29157895 -0.29444566]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 49.875
+Titik data 143 (Fitur: [-0.28349451 -0.19773884 -0.29157895 -0.29975386]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 49.875
+Titik data 144 (Fitur: [-0.26797757 -0.19373127 -0.27842353 -0.29444566]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.002, Inertia sementara: 49.877
+Titik data 145 (Fitur: [-0.26952926 -0.19292976 -0.28171238 -0.29179156]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 49.878
+Titik data 146 (Fitur: [-0.26952926 -0.1953343  -0.28993452 -0.29444566]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 49.879
+Titik data 147 (Fitur: [-0.27573604 -0.19934187 -0.29322337 -0.29975386]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 49.880
+Titik data 148 (Fitur: [-0.27263265 -0.1953343  -0.28993452 -0.29842681]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 49.880
+Titik data 149 (Fitur: [-0.27728773 -0.19212824 -0.28664566 -0.29444566]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 49.881
+Titik data 150 (Fitur: [-0.28194282 -0.1953343  -0.29157895 -0.3010809 ]), Klaster: 0, Centroid: [-0.28297728 -0.19494245 -0.31250581 -0.30912184], Jarak kuadrat: 0.001, Inertia sementara: 49.882
+
+Total Inertia Manual: 49.882
+Inertia dari sklearn: 49.882
+==================================================
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="model-plotting-diagram-elbow-method">
+<h2><strong>Model Plotting Diagram Elbow Method</strong><a class="headerlink" href="#model-plotting-diagram-elbow-method" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. Siapkan fitur (X) dan label (y)</span>
+<span class="n">feature_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;sepal length&#39;</span><span class="p">,</span> <span class="s1">&#39;sepal width&#39;</span><span class="p">,</span> <span class="s1">&#39;petal length&#39;</span><span class="p">,</span> <span class="s1">&#39;petal width&#39;</span><span class="p">]</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">df_merged</span><span class="p">[</span><span class="n">feature_names</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df_merged</span><span class="p">[</span><span class="s1">&#39;class&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;category&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">codes</span><span class="o">.</span><span class="n">values</span>  <span class="c1"># label dikodekan ke angka</span>
+
+<span class="c1"># 2. Standarisasi data</span>
+<span class="n">scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+<span class="n">X_scaled</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="c1"># 3. Hitung inertia untuk berbagai nilai k</span>
+<span class="n">inertias</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">K_range</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">K_range</span><span class="p">:</span>
+    <span class="n">kmeans</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+    <span class="n">kmeans</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_scaled</span><span class="p">)</span>
+    <span class="n">inertias</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">kmeans</span><span class="o">.</span><span class="n">inertia_</span><span class="p">)</span>
+
+<span class="c1"># 4. Plot Elbow Diagram</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">K_range</span><span class="p">,</span> <span class="n">inertias</span><span class="p">,</span> <span class="s1">&#39;bo-&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Inertia&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Metode Elbow - Menentukan Jumlah Klaster Optimal&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Jumlah Klaster (k)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Inertia&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">K_range</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Tambahkan label inertia di tiap titik</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">inertia</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">inertias</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">K_range</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">inertias</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">inertia</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/41f862d53ef1d1a0ace1f83b86ac871021ca205d7e9f652339da0b9823472d61.png" src="_images/41f862d53ef1d1a0ace1f83b86ac871021ca205d7e9f652339da0b9823472d61.png" />
+</div>
+</div>
+</section>
+<section id="menghitung-silhouette-score-untuk-jumlah-cluster-2-3-dan-4">
+<h2><strong>Menghitung Silhouette Score untuk Jumlah Cluster 2,3 dan 4</strong><a class="headerlink" href="#menghitung-silhouette-score-untuk-jumlah-cluster-2-3-dan-4" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. Siapkan fitur (X) dan label (y)</span>
+<span class="n">feature_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;sepal length&#39;</span><span class="p">,</span> <span class="s1">&#39;sepal width&#39;</span><span class="p">,</span> <span class="s1">&#39;petal length&#39;</span><span class="p">,</span> <span class="s1">&#39;petal width&#39;</span><span class="p">]</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">df_merged</span><span class="p">[</span><span class="n">feature_names</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df_merged</span><span class="p">[</span><span class="s1">&#39;class&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;category&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">codes</span><span class="o">.</span><span class="n">values</span>  <span class="c1"># label dikodekan ke angka</span>
+
+<span class="c1"># 2. Standarisasi data</span>
+<span class="n">scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+<span class="n">X_scaled</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="c1"># 3. Fungsi untuk melakukan K-Means dan menghitung Silhouette Score</span>
+<span class="k">def</span> <span class="nf">perform_kmeans_with_silhouette</span><span class="p">(</span><span class="n">X_scaled</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+    <span class="n">kmeans</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="n">kmeans</span><span class="o">.</span><span class="n">fit_predict</span><span class="p">(</span><span class="n">X_scaled</span><span class="p">)</span>
+
+    <span class="c1"># Menghitung Silhouette Score</span>
+    <span class="n">silhouette_avg</span> <span class="o">=</span> <span class="n">silhouette_score</span><span class="p">(</span><span class="n">X_scaled</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
+
+    <span class="c1"># Centroid dari masing-masing klaster</span>
+    <span class="n">centroids</span> <span class="o">=</span> <span class="n">kmeans</span><span class="o">.</span><span class="n">cluster_centers_</span>
+
+    <span class="c1"># Output hasil untuk klaster k</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Hasil K-Means dengan </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> Klaster ===&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Centroids:</span><span class="se">\n</span><span class="si">{</span><span class="n">centroids</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Silhouette Score untuk </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> klaster: </span><span class="si">{</span><span class="n">silhouette_avg</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">silhouette_avg</span>
+
+<span class="c1"># 4. Melakukan clustering dan menghitung Silhouette Score untuk k=2, 3, dan 4</span>
+<span class="n">silhouette_scores</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">k_values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">k_values</span><span class="p">:</span>
+    <span class="n">score</span> <span class="o">=</span> <span class="n">perform_kmeans_with_silhouette</span><span class="p">(</span><span class="n">X_scaled</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+    <span class="n">silhouette_scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">score</span><span class="p">)</span>
+
+<span class="c1"># 5. Menentukan k dengan Silhouette Score terbaik</span>
+<span class="n">best_k</span> <span class="o">=</span> <span class="n">k_values</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">silhouette_scores</span><span class="p">)]</span>
+<span class="n">best_score</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">silhouette_scores</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&gt;&gt;&gt; Jumlah cluster terbaik dengan dengan Silhouette Score mendekati 1 adalah k = </span><span class="si">{</span><span class="n">best_k</span><span class="si">}</span><span class="s2"> (dengan score = </span><span class="si">{</span><span class="n">best_score</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+
+<span class="c1"># 6. Plot Silhouette Scores</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">k_values</span><span class="p">,</span> <span class="n">silhouette_scores</span><span class="p">,</span> <span class="s1">&#39;bo-&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Silhouette Score untuk Jumlah Klaster yang Berbeda&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Jumlah Klaster (k)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Silhouette Score&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">k_values</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>=== Hasil K-Means dengan 2 Klaster ===
+Centroids:
+[[-0.28297728 -0.19494245 -0.31250581 -0.30912184]
+ [ 2.5467955   1.75448205  2.8125523   2.78209656]]
+Silhouette Score untuk 2 klaster: 0.927
+
+=== Hasil K-Means dengan 3 Klaster ===
+Centroids:
+[[-0.28297728 -0.19494245 -0.31250581 -0.30912184]
+ [ 2.60575987  1.08079046  2.79360223  2.60307131]
+ [ 1.72129425 11.18616424  3.07785329  5.28845   ]]
+Silhouette Score untuk 3 klaster: 0.935
+
+=== Hasil K-Means dengan 4 Klaster ===
+Centroids:
+[[-0.28297728 -0.19494245 -0.31250581 -0.30912184]
+ [ 1.50599669  1.1762565   3.25257373  2.73885687]
+ [ 1.72129425 11.18616424  3.07785329  5.28845   ]
+ [ 4.07211078  0.95350241  2.18164023  2.42202389]]
+Silhouette Score untuk 4 klaster: 0.919
+
+&gt;&gt;&gt; Jumlah cluster terbaik dengan dengan Silhouette Score mendekati 1 adalah k = 3 (dengan score = 0.935)
+</pre></div>
+</div>
+<img alt="_images/3ab1371b895d623b46139d04942277ae3f56d8a1e104054d5c7ae197b09b614d.png" src="_images/3ab1371b895d623b46139d04942277ae3f56d8a1e104054d5c7ae197b09b614d.png" />
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="uts_pendat.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Data Understanding</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pengertian-k-means-clustering"><strong>Pengertian <em>K-Means Clustering</em></strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#manfaat-clustering"><strong>Manfaat <em>Clustering</em></strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inertia-sum-square-error-sse"><strong>Inertia (Sum Square error/SSE)</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#silhouette-analysis"><strong>Silhouette Analysis</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementasi-dengan-menggunakan-data-iris"><strong>Implementasi dengan menggunakan data Iris</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#library-yang-digunakan"><strong>Library yang digunakan</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pengumpulan-data"><strong>Pengumpulan Data</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#clustering-pada-data-iris-menggunakan-k-means-dengan-jumlah-cluster-2-3-dan-4"><strong>Clustering pada data Iris menggunakan K-Means dengan jumlah cluster 2,3 dan 4</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-plotting-dengan-jumlah-cluster-2-3-dan-4"><strong>Model Plotting dengan Jumlah Cluster 2, 3 dan 4</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#menghitung-inertia-untuk-jumlah-cluster-2-3-dan-4"><strong>Menghitung Inertia untuk Jumlah Cluster 2,3 dan 4</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-plotting-diagram-elbow-method"><strong>Model Plotting Diagram Elbow Method</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#menghitung-silhouette-score-untuk-jumlah-cluster-2-3-dan-4"><strong>Menghitung Silhouette Score untuk Jumlah Cluster 2,3 dan 4</strong></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Tegar Firmandani
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
