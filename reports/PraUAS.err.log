@@ -18,14 +18,15 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-    data_filled.to_csv("land_mines.csv", index=False)
+data.shape #untuk mengetahui bentuk dataset(baris & kolom)
+
 ------------------
 
 
 [0;31m---------------------------------------------------------------------------[0m
 [0;31mNameError[0m                                 Traceback (most recent call last)
-Cell [0;32mIn[12], line 1[0m
-[0;32m----> 1[0m [43mdata_filled[49m[38;5;241m.[39mto_csv([38;5;124m"[39m[38;5;124mland_mines.csv[39m[38;5;124m"[39m, index[38;5;241m=[39m[38;5;28;01mFalse[39;00m)
+Cell [0;32mIn[1], line 1[0m
+[0;32m----> 1[0m [43mdata[49m[38;5;241m.[39mshape [38;5;66;03m#untuk mengetahui bentuk dataset(baris & kolom)[39;00m
 
-[0;31mNameError[0m: name 'data_filled' is not defined
+[0;31mNameError[0m: name 'data' is not defined
 
